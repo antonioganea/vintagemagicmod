@@ -18,6 +18,15 @@ namespace VintageMagicMod
         public override void StartServerSide(ICoreServerAPI api)
         {
             Mod.Logger.Notification("Hello from template mod server side: " + Lang.Get("vintagemagicmod:hello"));
+
+            IChatCommand magicCommand = api.ChatCommands.Create("magic")
+            .WithDescription("Magic system command")
+            .RequiresPlayer()
+            .RequiresPrivilege(Privilege.chat)
+            .HandleWith((args) =>
+            {
+                return TextCommandResult.Success("I hope you are enjoying the magic mod.");
+            });
         }
 
         public override void StartClientSide(ICoreClientAPI api)
