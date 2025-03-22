@@ -17,7 +17,14 @@ namespace VintageMagicMod
         }
         public void StartServerSide(ICoreServerAPI api)
         {
-
+            IChatCommand magicCommand = api.ChatCommands.Create("davidMagic")
+         .WithDescription("Magic system command")
+         .RequiresPlayer()
+         .RequiresPrivilege(Privilege.chat)
+         .HandleWith((args) =>
+         {
+             return TextCommandResult.Success("I hope you are enjoying the magic mod.");
+         });
         }
         public void StartClientSide(ICoreClientAPI api)
         {
