@@ -16,10 +16,10 @@ namespace VintageMagicMod
     public class VintageMagicModModSystem : ModSystem
     {
 
-        AntonioSystem antonio;
-        DavidSystem david;
-        NedasSystem nedas;
-        NathanSystem nathan;
+        AntonioSystem antonio = new();
+        DavidSystem david = new();
+        NedasSystem nedas = new();
+        NathanSystem nathan = new();
 
         // Called on server and client
         // Useful for registering block/entity classes on both sides
