@@ -1,0 +1,83 @@
+{
+	"editor": {
+		"allAngles": false,
+		"entityTextureMode": false
+	},
+	"textureWidth": 16,
+	"textureHeight": 16,
+	"textureSizes": {
+	},
+	"textures": {
+		"rusty-iron": "game:block/metal/tarnished/rusty-iron"
+	},
+	"elements": [
+		{
+			"name": "Base",
+			"from": [ 1.0, 0.0, 1.0 ],
+			"to": [ 15.0, 1.0, 15.0 ],
+			"rotationOrigin": [ 1.0, 0.0, 1.0 ],
+			"faces": {
+				"north": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 14.0, 1.0 ] },
+				"east": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 14.0, 1.0 ] },
+				"south": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 14.0, 1.0 ] },
+				"west": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 14.0, 1.0 ] },
+				"up": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 14.0, 14.0 ] },
+				"down": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 14.0, 14.0 ] }
+			}
+		},
+		{
+			"name": "NorthSide",
+			"from": [ 0.0, 0.0, 0.0 ],
+			"to": [ 16.0, 16.0, 1.0 ],
+			"faces": {
+				"north": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+				"east": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 1.0, 16.0 ] },
+				"south": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+				"west": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 1.0, 16.0 ] },
+				"up": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 16.0, 1.0 ] },
+				"down": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 16.0, 1.0 ] }
+			}
+		},
+		{
+			"name": "SouthSide",
+			"from": [ 0.0, 0.0, 15.0 ],
+			"to": [ 16.0, 16.0, 16.0 ],
+			"rotationOrigin": [ 0.0, 0.0, 15.0 ],
+			"faces": {
+				"north": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+				"east": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 1.0, 16.0 ] },
+				"south": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 16.0, 16.0 ] },
+				"west": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 1.0, 16.0 ] },
+				"up": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 16.0, 1.0 ] },
+				"down": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 16.0, 1.0 ] }
+			}
+		},
+		{
+			"name": "WestSide",
+			"from": [ 0.0, 0.0, 1.0 ],
+			"to": [ 1.0, 16.0, 15.0 ],
+			"rotationOrigin": [ 0.0, 0.0, 16.0 ],
+			"faces": {
+				"north": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 1.0, 16.0 ] },
+				"east": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 14.0, 16.0 ] },
+				"south": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 1.0, 16.0 ] },
+				"west": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 14.0, 16.0 ] },
+				"up": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 1.0, 14.0 ] },
+				"down": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 1.0, 14.0 ] }
+			}
+		},
+		{
+			"name": "EastSide",
+			"from": [ 15.0, 0.0, 1.0 ],
+			"to": [ 16.0, 16.0, 15.0 ],
+			"rotationOrigin": [ 15.0, 0.0, 16.0 ],
+			"faces": {
+				"north": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 1.0, 16.0 ] },
+				"east": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 14.0, 16.0 ] },
+				"south": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 1.0, 16.0 ] },
+				"west": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 14.0, 16.0 ] },
+				"up": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 1.0, 14.0 ] },
+				"down": { "texture": "#rusty-iron", "uv": [ 0.0, 0.0, 1.0, 14.0 ] }
+			}
+		}
+	]}
