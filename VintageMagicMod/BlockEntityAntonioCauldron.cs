@@ -133,7 +133,7 @@ namespace Vintagestory.GameContent
             }
             if (slotId == 0 || slotId == 1)
             {
-                GuiDialogBarrel guiDialogBarrel = this.invDialog;
+                GuiDialogAntonioCauldron guiDialogBarrel = this.invDialog;
                 if (guiDialogBarrel != null)
                 {
                     guiDialogBarrel.UpdateContents();
@@ -178,7 +178,7 @@ namespace Vintagestory.GameContent
                             this.Api.World.BlockAccessor.MarkBlockEntityDirty(this.Pos);
                         }
                     }
-                    GuiDialogBarrel guiDialogBarrel = this.invDialog;
+                    GuiDialogAntonioCauldron guiDialogBarrel = this.invDialog;
                     if (guiDialogBarrel != null)
                     {
                         guiDialogBarrel.UpdateContents();
@@ -242,7 +242,7 @@ namespace Vintagestory.GameContent
             {
                 base.OnBlockBroken(byPlayer);
             }
-            GuiDialogBarrel guiDialogBarrel = this.invDialog;
+            GuiDialogAntonioCauldron guiDialogBarrel = this.invDialog;
             if (guiDialogBarrel != null)
             {
                 guiDialogBarrel.TryClose();
@@ -282,7 +282,7 @@ namespace Vintagestory.GameContent
             if (this.invDialog == null)
             {
                 ICoreClientAPI capi = this.Api as ICoreClientAPI;
-                this.invDialog = new GuiDialogBarrel(Lang.Get("Barrel", Array.Empty<object>()), this.Inventory, this.Pos, this.Api as ICoreClientAPI);
+                this.invDialog = new GuiDialogAntonioCauldron(Lang.Get("Barrel", Array.Empty<object>()), this.Inventory, this.Pos, this.Api as ICoreClientAPI);
                 this.invDialog.OnClosed += delegate
                 {
                     this.invDialog = null;
@@ -338,12 +338,12 @@ namespace Vintagestory.GameContent
             if (packetid == 1001)
             {
                 (this.Api.World as IClientWorldAccessor).Player.InventoryManager.CloseInventory(this.Inventory);
-                GuiDialogBarrel guiDialogBarrel = this.invDialog;
+                GuiDialogAntonioCauldron guiDialogBarrel = this.invDialog;
                 if (guiDialogBarrel != null)
                 {
                     guiDialogBarrel.TryClose();
                 }
-                GuiDialogBarrel guiDialogBarrel2 = this.invDialog;
+                GuiDialogAntonioCauldron guiDialogBarrel2 = this.invDialog;
                 if (guiDialogBarrel2 != null)
                 {
                     guiDialogBarrel2.Dispose();
@@ -362,7 +362,7 @@ namespace Vintagestory.GameContent
             {
                 this.currentMesh = this.GenMesh();
                 this.MarkDirty(true, null);
-                GuiDialogBarrel guiDialogBarrel = this.invDialog;
+                GuiDialogAntonioCauldron guiDialogBarrel = this.invDialog;
                 if (guiDialogBarrel != null)
                 {
                     guiDialogBarrel.UpdateContents();
@@ -406,7 +406,7 @@ namespace Vintagestory.GameContent
         public override void OnBlockUnloaded()
         {
             base.OnBlockUnloaded();
-            GuiDialogBarrel guiDialogBarrel = this.invDialog;
+            GuiDialogAntonioCauldron guiDialogBarrel = this.invDialog;
             if (guiDialogBarrel == null)
             {
                 return;
@@ -422,7 +422,7 @@ namespace Vintagestory.GameContent
         }
 
         // Token: 0x04000EDB RID: 3803
-        private GuiDialogBarrel invDialog;
+        private GuiDialogAntonioCauldron invDialog;
 
         // Token: 0x04000EDC RID: 3804
         private MeshData currentMesh;
