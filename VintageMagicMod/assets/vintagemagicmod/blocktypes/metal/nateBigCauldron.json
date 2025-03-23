@@ -1,0 +1,88 @@
+{
+    "code": "natesBigCauldron",
+    "shape": { "base": "block/metal/cauldron/cauldron-magic" },
+    "creativeinventory": {
+        "general": [ "*" ],
+        "decorative": [ "*" ]
+    },
+    "blockmaterial": "Metal",
+    "replaceable": 900,
+    "resistance": 1.5,
+    "maxStackSize": 1,
+    "lightAbsorption": 1,
+    "variantgroups": [
+        {
+            "code": "metal",
+            "states": [ "iron", "bismuth", "copper", "lead" ]
+        }
+    ],
+    "textures": {
+        "basetexture": { "base": "game:block/metal/plate/{metal}" }
+    },
+    "behaviors": [
+        {
+            "name": "WrenchOrientable",
+            "properties": { "hideInteractionHelpInSurvival": true }
+        }
+    ],
+    "attributes": {
+        "reinforcable": true,
+        "partialAttachable": true,
+        "capacityLitres": 50
+    },
+    "sideao": {
+        "all": false
+    },
+    "sidesolid": {
+        "all": false
+    },
+    "emitsideao": {
+        "all": false
+    },
+    "sideopaque": {
+        "all": false
+    },
+    "collisionbox": {
+        "x1": 0,
+        "y1": 0,
+        "z1": 0,
+        "x2": 1,
+        "y2": 0.9375,
+        "z2": 1
+    },
+    "selectionbox": {
+        "x1": 0,
+        "y1": 0,
+        "z1": 0,
+        "x2": 1,
+        "y2": 0.9375,
+        "z2": 1
+    },
+    "combustibleProps": {
+        "burnTemperature": 600,
+        "burnDuration": 20
+    },
+    "sounds": {
+        "place": "game:block/chute",
+        "hit": "game:block/chute",
+        "break": "game:block/chute",
+        "walk": "game:block/chute"
+    },
+    "materialDensity": 600,
+    "heldTpIdleAnimation": "holdbothhandslarge",
+    "heldRightReadyAnimation": "heldblockready",
+    "heldTpUseAnimation": "twohandplaceblock",
+    "tpHandTransform": {
+        "translation": {
+            "x": -1.7,
+            "y": -0.95,
+            "z": -0.69
+        },
+        "rotation": {
+            "x": 12,
+            "y": 14,
+            "z": -81
+        },
+        "scale": 0.36
+    }
+}

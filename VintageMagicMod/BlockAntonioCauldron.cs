@@ -22,11 +22,11 @@ namespace Vintagestory.GameContent
             }
         }
 
-        public AssetLocation emptyShape { get; protected set; } = AssetLocation.Create("block/metal/cauldron/antoniocauldron", VintageMagicModModSystem.Domain);
-        public AssetLocation sealedShape { get; protected set; } = AssetLocation.Create("block/metal/cauldron/antoniocauldron", VintageMagicModModSystem.Domain);
+        public AssetLocation emptyShape { get; protected set; } = AssetLocation.Create("block/metal/cauldron/cauldron-magic", VintageMagicModModSystem.Domain);
+        public AssetLocation sealedShape { get; protected set; } = AssetLocation.Create("block/metal/cauldron/cauldron-magic", VintageMagicModModSystem.Domain);
         public AssetLocation contentsShape { get; protected set; } = AssetLocation.Create("block/wood/barrel/contents", "game");
-        public AssetLocation opaqueLiquidContentsShape { get; protected set; } = AssetLocation.Create("block/wood/barrel/opaqueliquidcontents", "game");
-        public AssetLocation liquidContentsShape { get; protected set; } = AssetLocation.Create("block/wood/barrel/liquidcontents", "game");
+        public AssetLocation opaqueLiquidContentsShape { get; protected set; } = AssetLocation.Create("block/wood/barrel/opaqueliquidcontents", VintageMagicModModSystem.Domain);
+        public AssetLocation liquidContentsShape { get; protected set; } = AssetLocation.Create("block/wood/barrel/liquidcontents", VintageMagicModModSystem.Domain);
 
         public override int GetContainerSlotId(BlockPos pos)
         {
