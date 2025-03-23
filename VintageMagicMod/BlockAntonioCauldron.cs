@@ -48,6 +48,7 @@ namespace Vintagestory.GameContent
             else
             {
                 // These lines below were modified from dnSPY code (trying to do 2 assignments in one line) ~ antonio
+                //meshrefs = (capi.ObjectCache["barrelMeshRefs" + this.Code] = new Dictionary<string, MultiTextureMeshRef>());
                 meshrefs = new Dictionary<string, MultiTextureMeshRef>();
                 capi.ObjectCache["barrelMeshRefs" + this.Code] = meshrefs;
             }
@@ -266,6 +267,7 @@ namespace Vintagestory.GameContent
                 for (int i = 0; i < contentMesh.Rgba.Length; i++)
                 {
                     // This line has been modified from dnSPY code (automatic conversions from int to byte) ~ antonio
+                    //contentMesh.Rgba[i] = contentMesh.Rgba[i] * rgba[i % 4] / byte.MaxValue;
                     contentMesh.Rgba[i] = (byte)(contentMesh.Rgba[i] * rgba[i % 4] / byte.MaxValue);
                 }
             }
@@ -396,7 +398,7 @@ namespace Vintagestory.GameContent
                         Itemstacks = lstacks,
                         GetMatchingStacks = delegate(WorldInteraction wi, BlockSelection bs, EntitySelection ws)
                         {
-                            BlockEntityBarrel blockEntityBarrel = api.World.BlockAccessor.GetBlockEntity(bs.Position) as BlockEntityBarrel;
+                            BlockEntityAntonioCauldron blockEntityBarrel = api.World.BlockAccessor.GetBlockEntity(bs.Position) as BlockEntityAntonioCauldron;
                             if (blockEntityBarrel == null || blockEntityBarrel.Sealed)
                             {
                                 return null;
@@ -412,7 +414,7 @@ namespace Vintagestory.GameContent
                         Itemstacks = linenStack,
                         GetMatchingStacks = delegate(WorldInteraction wi, BlockSelection bs, EntitySelection ws)
                         {
-                            BlockEntityBarrel blockEntityBarrel2 = api.World.BlockAccessor.GetBlockEntity(bs.Position) as BlockEntityBarrel;
+                            BlockEntityAntonioCauldron blockEntityBarrel2 = api.World.BlockAccessor.GetBlockEntity(bs.Position) as BlockEntityAntonioCauldron;
                             string text;
                             if (blockEntityBarrel2 == null)
                             {
@@ -452,10 +454,10 @@ namespace Vintagestory.GameContent
 
         public override WorldInteraction[] GetPlacedBlockInteractionHelp(IWorldAccessor world, BlockSelection blockSel, IPlayer forPlayer)
         {
-            BlockEntityBarrel bebarrel = null;
+            BlockEntityAntonioCauldron bebarrel = null;
             if (blockSel.Position != null)
             {
-                bebarrel = world.BlockAccessor.GetBlockEntity(blockSel.Position) as BlockEntityBarrel;
+                bebarrel = world.BlockAccessor.GetBlockEntity(blockSel.Position) as BlockEntityAntonioCauldron;
             }
             if (bebarrel != null && bebarrel.Sealed)
             {
@@ -475,10 +477,10 @@ namespace Vintagestory.GameContent
             {
                 return false;
             }
-            BlockEntityBarrel bebarrel = null;
+            BlockEntityAntonioCauldron bebarrel = null;
             if (blockSel.Position != null)
             {
-                bebarrel = world.BlockAccessor.GetBlockEntity(blockSel.Position) as BlockEntityBarrel;
+                bebarrel = world.BlockAccessor.GetBlockEntity(blockSel.Position) as BlockEntityAntonioCauldron;
             }
             if (bebarrel != null && bebarrel.Sealed)
             {
@@ -528,7 +530,7 @@ namespace Vintagestory.GameContent
             {
                 text = "";
             }
-            BlockEntityBarrel bebarrel = world.BlockAccessor.GetBlockEntity(pos) as BlockEntityBarrel;
+            BlockEntityAntonioCauldron bebarrel = world.BlockAccessor.GetBlockEntity(pos) as BlockEntityAntonioCauldron;
             if (bebarrel != null)
             {
                 ItemSlot slot = bebarrel.Inventory[0];
