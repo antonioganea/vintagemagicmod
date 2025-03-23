@@ -1,6 +1,12 @@
 {
 
 	"code": "antoniocauldron",
+	"class": "BlockAntonioCauldron",
+	"entityClass": "AntonioCauldron",
+	"behaviors": [
+		{ "name": "Lockable" },
+		{ "name": "UnstableFalling" }
+	],
 	"shape": { "base": "block/metal/cauldron/antoniocauldron" },
 	"creativeinventory": {
 		"general": [ "*" ],

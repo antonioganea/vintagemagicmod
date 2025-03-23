@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Server;
+using Vintagestory.GameContent;
 
 namespace VintageMagicMod
 {
@@ -13,7 +14,8 @@ namespace VintageMagicMod
     {
         public void Start(ICoreAPI api)
         {
-
+            api.RegisterBlockClass("BlockAntonioCauldron", typeof(BlockAntonioCauldron));
+            api.RegisterBlockEntityClass("AntonioCauldron", typeof(BlockEntityAntonioCauldron));
         }
         public void StartServerSide(ICoreServerAPI api)
         {
