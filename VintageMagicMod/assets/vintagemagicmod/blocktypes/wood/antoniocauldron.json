@@ -1,7 +1,13 @@
 {
 
 	"code": "antoniocauldron",
-	"shape": { "base": "block/metal/cauldron/antoniocauldron" },
+	"class": "BlockAntonioCauldron",
+	"entityClass": "AntonioCauldron",
+	"behaviors": [
+		{ "name": "Lockable" },
+		{ "name": "UnstableFalling" }
+	],
+	"shape": { "base": "block/metal/cauldron/cauldron-magic" },
 	"creativeinventory": {
 		"general": [ "*" ],
 		"decorative": [ "*" ]
@@ -11,8 +17,14 @@
 	"resistance": 1.5,
 	"maxStackSize": 1,
 	"lightAbsorption": 1,
+	"variantgroups": [
+		{
+			"code": "metal",
+			"states": [ "iron", "bismuth", "copper", "lead" ]
+		}
+	],
 	"textures": {
-		"lid": { "base": "game:block/wood/barrel/lid" }
+		"basetexture": { "base": "game:block/metal/plate/{metal}" }
 	},
 	"attributes": {
 		"reinforcable": true,
