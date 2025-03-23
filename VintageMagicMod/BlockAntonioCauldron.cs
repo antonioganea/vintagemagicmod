@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using VintageMagicMod;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
@@ -21,8 +22,8 @@ namespace Vintagestory.GameContent
             }
         }
 
-        public AssetLocation emptyShape { get; protected set; } = AssetLocation.Create("block/wood/barrel/empty", "game");
-        public AssetLocation sealedShape { get; protected set; } = AssetLocation.Create("block/wood/barrel/closed", "game");
+        public AssetLocation emptyShape { get; protected set; } = AssetLocation.Create("block/metal/cauldron/antoniocauldron", VintageMagicModModSystem.Domain);
+        public AssetLocation sealedShape { get; protected set; } = AssetLocation.Create("block/metal/cauldron/antoniocauldron", VintageMagicModModSystem.Domain);
         public AssetLocation contentsShape { get; protected set; } = AssetLocation.Create("block/wood/barrel/contents", "game");
         public AssetLocation opaqueLiquidContentsShape { get; protected set; } = AssetLocation.Create("block/wood/barrel/opaqueliquidcontents", "game");
         public AssetLocation liquidContentsShape { get; protected set; } = AssetLocation.Create("block/wood/barrel/liquidcontents", "game");
@@ -153,6 +154,7 @@ namespace Vintagestory.GameContent
             ICoreClientAPI coreClientAPI = this.api as ICoreClientAPI;
             Shape shape = Vintagestory.API.Common.Shape.TryGet(coreClientAPI, issealed ? this.sealedShape : this.emptyShape);
             MeshData barrelMesh;
+
             coreClientAPI.Tesselator.TesselateShape(this, shape, out barrelMesh, null, null, null);
             if (!issealed)
             {

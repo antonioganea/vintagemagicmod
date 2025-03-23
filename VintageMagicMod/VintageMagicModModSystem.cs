@@ -15,6 +15,7 @@ namespace VintageMagicMod
 
     public class VintageMagicModModSystem : ModSystem
     {
+        public const string Domain = "vintagemagicmod";
 
         AntonioSystem antonio = new();
         DavidSystem david = new();
