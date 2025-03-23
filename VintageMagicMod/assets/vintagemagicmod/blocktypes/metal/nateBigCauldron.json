@@ -13,12 +13,18 @@
     "variantgroups": [
         {
             "code": "metal",
-            "states": [ "iron", "bismuth", "copper", "lead"]
+            "states": [ "iron", "bismuth", "copper", "lead" ]
         }
     ],
     "textures": {
-        "cauldronNate": { "base": "game:block/metal/plate/{metal}" }
+        "basetexture": { "base": "game:block/metal/plate/{metal}" }
     },
+    "behaviors": [
+        {
+            "name": "WrenchOrientable",
+            "properties": { "hideInteractionHelpInSurvival": true }
+        }
+    ],
     "attributes": {
         "reinforcable": true,
         "partialAttachable": true,
