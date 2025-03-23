@@ -1,0 +1,61 @@
+{
+	"editor": {
+		"collapsedPaths": "Root/origin/Base/NeckN,Root/origin/Base/NeckW,Root/origin/Base,Root/origin/Base/W,Root/origin/Base/NeckE,Root/origin/Base/E,Root/origin/Base/NeckS,Root/origin/Firewood",
+		"allAngles": false,
+		"entityTextureMode": false
+	},
+	"textureWidth": 16,
+	"textureHeight": 16,
+	"textureSizes": {
+		"blackbronze": [16,16],
+		"aged": [16,16],
+		"redwood-2x2-h": [32,32]
+	},
+	"textures": {
+		"redwood-2x2-h": "game:block/wood/bark/redwood-2x2-h",
+		"acacia": "game:block/wood/crudechair/acacia"
+	},
+	"elements": [
+		{
+			"name": "origin",
+			"from": [ 15.0, 0.0, 8.0 ],
+			"to": [ 15.0, 0.0, 8.0 ],
+			"rotationOrigin": [ 14.5, 0.0, 8.0 ],
+			"rotationX": -90.0,
+			"rotationZ": 90.0,
+			"faces": {
+			},
+			"children": [
+				{
+					"name": "Spoon",
+					"from": [ -2.0, -2.0, 0.0 ],
+					"to": [ 1.0, 1.0, 1.0 ],
+					"rotationOrigin": [ -1.0, -2.0, 0.0 ],
+					"faces": {
+						"north": { "texture": "#redwood-2x2-h", "uv": [ 0.0, 0.0, 3.0, 3.0 ] },
+						"east": { "texture": "#redwood-2x2-h", "uv": [ 0.0, 0.0, 1.0, 3.0 ] },
+						"south": { "texture": "#redwood-2x2-h", "uv": [ 0.0, 0.0, 3.0, 3.0 ] },
+						"west": { "texture": "#redwood-2x2-h", "uv": [ 0.0, 0.0, 1.0, 3.0 ] },
+						"up": { "texture": "#redwood-2x2-h", "uv": [ 0.0, 0.0, 3.0, 1.0 ] },
+						"down": { "texture": "#redwood-2x2-h", "uv": [ 0.0, 0.0, 3.0, 1.0 ] }
+					},
+					"children": [
+						{
+							"name": "Hanlde",
+							"from": [ 1.0, 3.0, 0.0 ],
+							"to": [ 2.0, 16.0, 1.0 ],
+							"rotationOrigin": [ 1.0, 3.0, 0.0 ],
+							"faces": {
+								"north": { "texture": "#redwood-2x2-h", "uv": [ 0.0, 0.0, 1.0, 13.0 ] },
+								"east": { "texture": "#redwood-2x2-h", "uv": [ 0.0, 0.0, 1.0, 13.0 ] },
+								"south": { "texture": "#redwood-2x2-h", "uv": [ 0.0, 0.0, 1.0, 13.0 ] },
+								"west": { "texture": "#redwood-2x2-h", "uv": [ 0.0, 0.0, 1.0, 13.0 ] },
+								"up": { "texture": "#acacia", "uv": [ 0.0, 0.0, 1.0, 1.0 ] },
+								"down": { "texture": "#acacia", "uv": [ 0.0, 0.0, 1.0, 1.0 ] }
+							}
+						}
+					]
+				}
+			]
+		}
+	]}
