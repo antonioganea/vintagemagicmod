@@ -6,5 +6,5 @@
   "vintagemagicmod:block-natesbigcauldron-lead": "Lead Cauldron",
   "vintagemagicmod:block-antoniocauldron": "Magic Cauldron",
   "vintagemagicmod:item-spoon": "Spoon",
-  "vintagemagicmod:block-witchoven": "Witch's Oven"
+  "vintagemagicmod:block-witchoven-*": "Witch's Oven"
 }
