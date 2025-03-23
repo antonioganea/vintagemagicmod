@@ -289,8 +289,8 @@ namespace Vintagestory.GameContent
                     capi.Network.SendBlockEntityPacket(this.Pos, 1001, null);
                     capi.Network.SendPacketClient(this.Inventory.Close(byPlayer));
                 };
-                this.invDialog.OpenSound = AssetLocation.Create("sounds/block/barrelopen", base.Block.Code.Domain);
-                this.invDialog.CloseSound = AssetLocation.Create("sounds/block/barrelclose", base.Block.Code.Domain);
+                this.invDialog.OpenSound = AssetLocation.Create("sounds/block/barrelopen", "game");
+                this.invDialog.CloseSound = AssetLocation.Create("sounds/block/barrelclose", "game");
                 this.invDialog.TryOpen();
                 capi.Network.SendPacketClient(this.Inventory.Open(byPlayer));
                 capi.Network.SendBlockEntityPacket(this.Pos, 1000, null);
