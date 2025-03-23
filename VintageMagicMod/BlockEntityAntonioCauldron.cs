@@ -95,8 +95,8 @@ namespace Vintagestory.GameContent
         public override void Initialize(ICoreAPI api)
         {
             base.Initialize(api);
-            this.ownBlock = base.Block as BlockBarrel;
-            BlockBarrel blockBarrel = this.ownBlock;
+            this.ownBlock = base.Block as BlockAntonioCauldron;
+            BlockAntonioCauldron blockBarrel = this.ownBlock;
             bool flag;
             if (blockBarrel == null)
             {
@@ -428,7 +428,7 @@ namespace Vintagestory.GameContent
         private MeshData currentMesh;
 
         // Token: 0x04000EDD RID: 3805
-        private BlockBarrel ownBlock;
+        private BlockAntonioCauldron ownBlock;
 
         // Token: 0x04000EDE RID: 3806
         public bool Sealed;
