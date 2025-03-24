@@ -16,6 +16,11 @@ namespace VintageMagicMod
         {
             api.RegisterBlockClass("BlockAntonioCauldron", typeof(BlockAntonioCauldron));
             api.RegisterBlockEntityClass("AntonioCauldron", typeof(BlockEntityAntonioCauldron));
+
+            api.RegisterBlockClass("BlockWitchOven", typeof(BlockWitchOven));
+            api.RegisterBlockEntityClass("WitchOven", typeof(BlockEntityWitchOven));
+
+            // game:block/liquid/lava
         }
         public void StartServerSide(ICoreServerAPI api)
         {
