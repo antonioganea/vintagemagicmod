@@ -26,7 +26,7 @@ public class BlockWitchOven : Block, IIgnitable
         ICoreClientAPI capi = api as ICoreClientAPI;
         if (capi != null)
         {
-            interactions = ObjectCacheUtil.GetOrCreate(api, "ovenInteractions", delegate
+            interactions = ObjectCacheUtil.GetOrCreate(api, "witchOvenInteractions", delegate
             {
                 List<ItemStack> list = new List<ItemStack>();
                 List<ItemStack> fuelStacklist = new List<ItemStack>();
