@@ -75,7 +75,9 @@ public class BlockWitchOven : Block, IIgnitable
                             {
                                 return null;
                             }
-                            return (!(api.World.BlockAccessor.GetBlockEntity(bs.Position) is BlockEntityWitchOven BlockEntityWitchOven3)) ? null : BlockEntityWitchOven3.CanAdd(wi.Itemstacks);
+                            return null; // REMOVE
+                            // TODO:
+                            //return (!(api.World.BlockAccessor.GetBlockEntity(bs.Position) is BlockEntityWitchOven BlockEntityWitchOven3)) ? null : BlockEntityWitchOven3.CanAdd(wi.Itemstacks);
                         }
                     },
                     new WorldInteraction
@@ -84,7 +86,8 @@ public class BlockWitchOven : Block, IIgnitable
                         HotKeyCode = null,
                         MouseButton = EnumMouseButton.Right,
                         Itemstacks = fuelStacklist.ToArray(),
-                        GetMatchingStacks = (WorldInteraction wi, BlockSelection bs, EntitySelection es) => (!(api.World.BlockAccessor.GetBlockEntity(bs.Position) is BlockEntityWitchOven BlockEntityWitchOven2)) ? null : BlockEntityWitchOven2.CanAddAsFuel(fuelStacklist.ToArray())
+                        // TODO :
+                        //GetMatchingStacks = (WorldInteraction wi, BlockSelection bs, EntitySelection es) => (!(api.World.BlockAccessor.GetBlockEntity(bs.Position) is BlockEntityWitchOven BlockEntityWitchOven2)) ? null : BlockEntityWitchOven2.CanAddAsFuel(fuelStacklist.ToArray())
                     },
                     new WorldInteraction
                     {
@@ -98,7 +101,9 @@ public class BlockWitchOven : Block, IIgnitable
                             {
                                 return null;
                             }
-                            return (!(api.World.BlockAccessor.GetBlockEntity(bs.Position) is BlockEntityWitchOven BlockEntityWitchOven) || !BlockEntityWitchOven.CanIgnite()) ? null : wi.Itemstacks;
+                            return null; // REMOVE
+                            // TODO:
+                            //return (!(api.World.BlockAccessor.GetBlockEntity(bs.Position) is BlockEntityWitchOven BlockEntityWitchOven) || !BlockEntityWitchOven.CanIgnite()) ? null : wi.Itemstacks;
                         }
                     }
                 };
@@ -117,47 +122,47 @@ public class BlockWitchOven : Block, IIgnitable
     {
         if (world.BlockAccessor.GetBlockEntity(bs.Position) is BlockEntityWitchOven BlockEntityWitchOven)
         {
-            return BlockEntityWitchOven.OnInteract(byPlayer, bs);
+            return BlockEntityWitchOven.OnPlayerRightClick(byPlayer, bs);
         }
 
         return base.OnBlockInteractStart(world, byPlayer, bs);
     }
 
+
+    #region IIgnitable
     EnumIgniteState IIgnitable.OnTryIgniteStack(EntityAgent byEntity, BlockPos pos, ItemSlot slot, float secondsIgniting)
     {
-        if ((byEntity.World.BlockAccessor.GetBlockEntity(pos) as BlockEntityWitchOven).IsBurning)
+        if (!(this.api.World.BlockAccessor.GetBlockEntity(pos) as BlockEntityWitchOven).IsBurning)
         {
-            if (!(secondsIgniting > 2f))
-            {
-                return EnumIgniteState.Ignitable;
-            }
-
-            return EnumIgniteState.IgniteNow;
+            return EnumIgniteState.NotIgnitable;
         }
-
-        return EnumIgniteState.NotIgnitable;
-    }
-
-    public EnumIgniteState OnTryIgniteBlock(EntityAgent byEntity, BlockPos pos, float secondsIgniting)
-    {
-        if (!(byEntity.World.BlockAccessor.GetBlockEntity(pos) is BlockEntityWitchOven BlockEntityWitchOven) || !BlockEntityWitchOven.CanIgnite())
-        {
-            return EnumIgniteState.NotIgnitablePreventDefault;
-        }
-
-        if (!(secondsIgniting > 4f))
+        if (secondsIgniting <= 2f)
         {
             return EnumIgniteState.Ignitable;
         }
-
         return EnumIgniteState.IgniteNow;
     }
-
+    public EnumIgniteState OnTryIgniteBlock(EntityAgent byEntity, BlockPos pos, float secondsIgniting)
+    {
+        BlockEntityWitchOven bef = this.api.World.BlockAccessor.GetBlockEntity(pos) as BlockEntityWitchOven;
+        if (bef == null)
+        {
+            return EnumIgniteState.NotIgnitable;
+        }
+        return bef.GetIgnitableState(secondsIgniting);
+    }
     public void OnTryIgniteBlockOver(EntityAgent byEntity, BlockPos pos, float secondsIgniting, ref EnumHandling handling)
     {
+        BlockEntityWitchOven bef = this.api.World.BlockAccessor.GetBlockEntity(pos) as BlockEntityWitchOven;
+        if (bef != null && !bef.canIgniteFuel)
+        {
+            bef.canIgniteFuel = true;
+            bef.extinguishedTotalHours = this.api.World.Calendar.TotalHours;
+        }
         handling = EnumHandling.PreventDefault;
-        (byEntity.World.BlockAccessor.GetBlockEntity(pos) as BlockEntityWitchOven)?.TryIgnite();
     }
+    #endregion
+
 
     public override WorldInteraction[] GetPlacedBlockInteractionHelp(IWorldAccessor world, BlockSelection selection, IPlayer forPlayer)
     {
@@ -168,7 +173,8 @@ public class BlockWitchOven : Block, IIgnitable
     {
         if (manager.BlockAccess.GetBlockEntity(pos) is BlockEntityWitchOven BlockEntityWitchOven && BlockEntityWitchOven.IsBurning)
         {
-            BlockEntityWitchOven.RenderParticleTick(manager, pos, windAffectednessAtPos, secondsTicking, particles);
+            // TODO :
+            //BlockEntityWitchOven.RenderParticleTick(manager, pos, windAffectednessAtPos, secondsTicking, particles);
         }
 
         base.OnAsyncClientParticleTick(manager, pos, windAffectednessAtPos, secondsTicking);
