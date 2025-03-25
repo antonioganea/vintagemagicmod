@@ -53,6 +53,9 @@
   <Content Include="assets\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>
+  <None Remove="assets\vintagemagicmod\itemtypes\tool\wooden_wand.json" />
+  <None Remove="assets\vintagemagicmod\recipes\grid\wooden_wand.json" />
+  <None Remove="assets\vintagemagicmod\shapes\item\tool\wooden_wand.json" />
   <Content Include="modinfo.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>
