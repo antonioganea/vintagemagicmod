@@ -24,6 +24,25 @@ public class BlockWitchOven : Block, IIgnitable
         }
 
         ICoreClientAPI capi = api as ICoreClientAPI;
+
+        DefineInteractions(capi);
+
+        InitializeParticles();
+    }
+
+    public override bool OnBlockInteractStart(IWorldAccessor world, IPlayer byPlayer, BlockSelection bs)
+    {
+        if (world.BlockAccessor.GetBlockEntity(bs.Position) is BlockEntityWitchOven BlockEntityWitchOven)
+        {
+            return BlockEntityWitchOven.OnPlayerRightClick(byPlayer, bs);
+        }
+
+        return base.OnBlockInteractStart(world, byPlayer, bs);
+    }
+
+    #region Interactions
+    private void DefineInteractions(ICoreClientAPI capi)
+    {
         if (capi != null)
         {
             interactions = ObjectCacheUtil.GetOrCreate(api, "witchOvenInteractions", delegate
@@ -109,25 +128,13 @@ public class BlockWitchOven : Block, IIgnitable
                 };
             });
         }
-
-        InitializeParticles();
     }
 
-    public override bool DoParticalSelection(IWorldAccessor world, BlockPos pos)
+    public override WorldInteraction[] GetPlacedBlockInteractionHelp(IWorldAccessor world, BlockSelection selection, IPlayer forPlayer)
     {
-        return true;
+        return interactions.Append(base.GetPlacedBlockInteractionHelp(world, selection, forPlayer));
     }
-
-    public override bool OnBlockInteractStart(IWorldAccessor world, IPlayer byPlayer, BlockSelection bs)
-    {
-        if (world.BlockAccessor.GetBlockEntity(bs.Position) is BlockEntityWitchOven BlockEntityWitchOven)
-        {
-            return BlockEntityWitchOven.OnPlayerRightClick(byPlayer, bs);
-        }
-
-        return base.OnBlockInteractStart(world, byPlayer, bs);
-    }
-
+    #endregion
 
     #region IIgnitable
     EnumIgniteState IIgnitable.OnTryIgniteStack(EntityAgent byEntity, BlockPos pos, ItemSlot slot, float secondsIgniting)
@@ -163,10 +170,10 @@ public class BlockWitchOven : Block, IIgnitable
     }
     #endregion
 
-
-    public override WorldInteraction[] GetPlacedBlockInteractionHelp(IWorldAccessor world, BlockSelection selection, IPlayer forPlayer)
+    #region Particles
+    public override bool DoParticalSelection(IWorldAccessor world, BlockPos pos)
     {
-        return interactions.Append(base.GetPlacedBlockInteractionHelp(world, selection, forPlayer));
+        return true;
     }
 
     public override void OnAsyncClientParticleTick(IAsyncParticleManager manager, BlockPos pos, float windAffectednessAtPos, float secondsTicking)
@@ -244,4 +251,5 @@ public class BlockWitchOven : Block, IIgnitable
             particles[l] = advancedParticleProperties4;
         }
     }
+    #endregion
 }
