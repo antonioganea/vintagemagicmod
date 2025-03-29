@@ -822,6 +822,7 @@ namespace Vintagestory.GameContent
             }
         }
 
+        // TODO : might wanna remove and see if it's necessary ~ antonio
         public override void OnLoadCollectibleMappings(IWorldAccessor worldForResolve, Dictionary<int, AssetLocation> oldBlockIdMapping, Dictionary<int, AssetLocation> oldItemIdMapping, int schematicSeed, bool resolveImports)
         {
             base.OnLoadCollectibleMappings(worldForResolve, oldBlockIdMapping, oldItemIdMapping, schematicSeed, resolveImports);
@@ -937,19 +938,6 @@ namespace Vintagestory.GameContent
             renderer?.Dispose();
         }
 
-        InFirePitProps GetRenderProps(ItemStack contentStack)
-        {
-            if (contentStack?.ItemAttributes?.KeyExists("inFirePitProps") == true)
-            {
-                InFirePitProps props = contentStack.ItemAttributes["inFirePitProps"].AsObject<InFirePitProps>();
-                props.Transform.EnsureDefaultValues();
-
-                return props;
-            }
-            return null;
-        }
-
-
         public MeshData getOrCreateMesh(string burnstate, string contentstate)
         {
             Dictionary<string, MeshData> Meshes = ObjectCacheUtil.GetOrCreate(Api, "firepit-meshes", () => new Dictionary<string, MeshData>());
@@ -970,7 +958,7 @@ namespace Vintagestory.GameContent
             return meshdata;
         }
 
-
+        // Implementation of IHeatSource
         public float GetHeatStrength(IWorldAccessor world, BlockPos heatSourcePos, BlockPos heatReceiverPos)
         {
             return IsBurning ? 10 : (IsSmoldering ? 0.25f : 0);
