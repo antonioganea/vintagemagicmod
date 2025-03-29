@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using VintageMagicMod;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
@@ -44,7 +45,7 @@ namespace Vintagestory.GameContent
         GuiDialogBlockEntityFirepit clientDialog;
         bool clientSidePrevBurning;
 
-        FirepitContentsRenderer renderer;
+        WitchOvenHeatRenderer renderer;
 
         bool shouldRedraw;
 
@@ -116,16 +117,14 @@ namespace Vintagestory.GameContent
             RegisterGameTickListener(OnBurnTick, 100);
             RegisterGameTickListener(On500msTick, 500);
 
-            if (api is ICoreClientAPI)
-            {
-                renderer = new FirepitContentsRenderer(api as ICoreClientAPI, Pos);
-                (api as ICoreClientAPI).Event.RegisterRenderer(renderer, EnumRenderStage.Opaque, "firepit");
 
-                UpdateRenderer();
+            if (api.Side == EnumAppSide.Client)
+            {
+                ICoreClientAPI capi = (ICoreClientAPI)api;
+                capi.Event.RegisterRenderer(this.renderer = new WitchOvenHeatRenderer(this.Pos, capi), EnumRenderStage.Opaque, "witchoven");
+                this.UpdateRenderer();
             }
         }
-
-
 
         private void OnSlotModifid(int slotid)
         {
@@ -173,7 +172,9 @@ namespace Vintagestory.GameContent
             // Only tick on the server and merely sync to client
             if (Api is ICoreClientAPI)
             {
-                renderer?.contentStackRenderer?.OnUpdate(InputStackTemp);
+                //renderer?.contentStackRenderer?.OnUpdate(InputStackTemp);
+
+                // TODO : update renderer if still burning (or maybe somewhere else if not here) ~ antonio
                 return;
             }
 
@@ -617,6 +618,26 @@ namespace Vintagestory.GameContent
 
         void UpdateRenderer()
         {
+
+            // temporary, for testing :
+            renderer.SetFillLevel(5);
+            renderer.glowLevel = 90;
+
+
+            /*
+            // max = 8 voxels
+            float fillLevel = Math.Min(14, FuelSlot.StackSize + (float)8f * OreSlot.StackSize / OreCapacity + OutSlot.StackSize);
+            renderer.SetFillLevel(fillLevel);
+
+            // Ease in in beginning and ease out on end
+            double easinLevel = Math.Min(1, 24 * (Api.World.Calendar.TotalDays - burningStartTotalDays));
+            double easeoutLevel = Math.Min(1, 24 * (burningUntilTotalDays - Api.World.Calendar.TotalDays));
+
+            double glowLevel = Math.Max(0, Math.Min(easinLevel, easeoutLevel) * 250);
+
+            renderer.glowLevel = burning ? (int)glowLevel : 0;
+            */
+
             /*
             if (renderer == null) return;
 
