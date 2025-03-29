@@ -618,6 +618,7 @@ namespace Vintagestory.GameContent
 
         void UpdateRenderer()
         {
+            if (renderer == null) return;
 
             // temporary, for testing :
             renderer.SetFillLevel(5);
