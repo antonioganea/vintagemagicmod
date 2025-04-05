@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
+using VintageMagicMod;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
+using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Util;
@@ -14,6 +16,8 @@ public class BlockWitchOven : Block, IIgnitable
     private AdvancedParticleProperties[] particles;
 
     private Vec3f[] basePos;
+
+    private MeshRef cubeModelRef;
 
     public override void OnLoaded(ICoreAPI api)
     {
@@ -38,6 +42,43 @@ public class BlockWitchOven : Block, IIgnitable
         }
 
         return base.OnBlockInteractStart(world, byPlayer, bs);
+    }
+
+    public MeshRef GetMeshData(ICoreClientAPI api)
+    {
+        if (cubeModelRef == null)
+        {
+            cubeModelRef = CreateMeshData(api);
+        }
+
+        return cubeModelRef;
+    }
+
+    private MeshRef CreateMeshData(ICoreClientAPI api)
+    {
+        AssetLocation heatShape = AssetLocation.Create("block/metal/witchoven/witchoven-heat", VintageMagicModModSystem.Domain);
+
+        heatShape.WithPathPrefixOnce("shapes/").WithPathAppendixOnce(".json");
+
+        Shape shape = Vintagestory.API.Common.Shape.TryGet(api, heatShape);
+
+        ITexPositionSource t = new SimpleTextureSource();
+
+        api.Tesselator.TesselateShapeWithJointIds("witchoven", shape, out MeshData modeldata4, t, Vec3f.Zero);
+
+        return api.Render.UploadMesh(modeldata4);
+    }
+
+    public override void OnUnloaded(ICoreAPI api)
+    {
+        ICoreClientAPI capi = api as ICoreClientAPI;
+
+        if (capi == null)
+        {
+            return;
+        }
+
+        cubeModelRef?.Dispose();
     }
 
     #region Interactions
