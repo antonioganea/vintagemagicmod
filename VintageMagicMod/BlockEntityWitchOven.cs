@@ -173,8 +173,15 @@ namespace Vintagestory.GameContent
             if (Api is ICoreClientAPI)
             {
                 //renderer?.contentStackRenderer?.OnUpdate(InputStackTemp);
+                if (IsBurning)
+                {
+                    renderer.glowLevel = 150;
+                }
+                else
+                {
+                    renderer.glowLevel = 0;
+                }
 
-                // TODO : update renderer if still burning (or maybe somewhere else if not here) ~ antonio
                 return;
             }
 
@@ -621,8 +628,8 @@ namespace Vintagestory.GameContent
             if (renderer == null) return;
 
             // temporary, for testing :
-            renderer.SetFillLevel(5);
-            renderer.glowLevel = 90;
+            //renderer.SetFillLevel(5);
+            //renderer.glowLevel = 20;
 
 
             /*
