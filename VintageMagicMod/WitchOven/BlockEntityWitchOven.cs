@@ -42,7 +42,7 @@ namespace VintageMagicMod.WitchOven
         public double extinguishedTotalHours;
 
 
-        GuiDialogBlockEntityFirepit clientDialog;
+        GuiDialogBlockEntityWitchOven clientDialog;
         bool clientSidePrevBurning;
 
         WitchOvenHeatRenderer renderer;
@@ -556,7 +556,7 @@ namespace VintageMagicMod.WitchOven
                 {
                     SyncedTreeAttribute dtree = new SyncedTreeAttribute();
                     SetDialogValues(dtree);
-                    clientDialog = new GuiDialogBlockEntityFirepit(DialogTitle, Inventory, Pos, dtree, Api as ICoreClientAPI);
+                    clientDialog = new GuiDialogBlockEntityWitchOven(DialogTitle, Inventory, Pos, dtree, Api as ICoreClientAPI);
                     return clientDialog;
                 });
             }
