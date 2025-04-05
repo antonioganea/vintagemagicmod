@@ -2,25 +2,13 @@
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.Server;
+using Vintagestory.GameContent;
 
 namespace VintageMagicMod
 {
-
-    public interface TemporarySystem
-    {
-        public void Start(ICoreAPI api);
-        public void StartServerSide(ICoreServerAPI api);
-        public void StartClientSide(ICoreClientAPI api);
-    }
-
     public class VintageMagicModModSystem : ModSystem
     {
         public const string Domain = "vintagemagicmod";
-
-        AntonioSystem antonio = new();
-        DavidSystem david = new();
-        NedasSystem nedas = new();
-        NathanSystem nathan = new();
 
         // Called on server and client
         // Useful for registering block/entity classes on both sides
@@ -28,30 +16,31 @@ namespace VintageMagicMod
         {
             Mod.Logger.Notification("Hello from template mod: " + api.Side);
 
-            antonio.Start(api);
-            david.Start(api);
-            nedas.Start(api);
-            nathan.Start(api);
+
+            api.RegisterBlockClass("BlockAntonioCauldron", typeof(BlockAntonioCauldron));
+            api.RegisterBlockEntityClass("AntonioCauldron", typeof(BlockEntityAntonioCauldron));
+
+            api.RegisterBlockClass("BlockWitchOven", typeof(BlockWitchOven));
+            api.RegisterBlockEntityClass("WitchOven", typeof(BlockEntityWitchOven));
         }
 
         public override void StartServerSide(ICoreServerAPI api)
         {
             Mod.Logger.Notification("Hello from template mod server side: " + Lang.Get("vintagemagicmod:hello"));
 
-            antonio.StartServerSide(api);
-            david.StartServerSide(api);
-            nedas.StartServerSide(api);
-            nathan.StartServerSide(api);
+            IChatCommand magicCommand = api.ChatCommands.Create("magicCommand")
+            .WithDescription("Magic system command")
+            .RequiresPlayer()
+            .RequiresPrivilege(Privilege.chat)
+            .HandleWith((args) =>
+            {
+                return TextCommandResult.Success("I hope you are enjoying the magic mod.");
+            });
         }
 
         public override void StartClientSide(ICoreClientAPI api)
         {
             Mod.Logger.Notification("Hello from template mod client side: " + Lang.Get("vintagemagicmod:hello"));
-
-            antonio.StartClientSide(api);
-            david.StartClientSide(api);
-            nedas.StartClientSide(api);
-            nathan.StartClientSide(api);
         }
 
     }
