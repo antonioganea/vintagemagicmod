@@ -6,8 +6,11 @@ using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Util;
+using Vintagestory.GameContent;
 
-namespace Vintagestory.GameContent;
+using VintageMagicMod.Utils;
+
+namespace VintageMagicMod.WitchOven;
 
 public class BlockWitchOven : Block, IIgnitable
 {
@@ -180,7 +183,7 @@ public class BlockWitchOven : Block, IIgnitable
     #region IIgnitable
     EnumIgniteState IIgnitable.OnTryIgniteStack(EntityAgent byEntity, BlockPos pos, ItemSlot slot, float secondsIgniting)
     {
-        if (!(this.api.World.BlockAccessor.GetBlockEntity(pos) as BlockEntityWitchOven).IsBurning)
+        if (!(api.World.BlockAccessor.GetBlockEntity(pos) as BlockEntityWitchOven).IsBurning)
         {
             return EnumIgniteState.NotIgnitable;
         }
@@ -192,7 +195,7 @@ public class BlockWitchOven : Block, IIgnitable
     }
     public EnumIgniteState OnTryIgniteBlock(EntityAgent byEntity, BlockPos pos, float secondsIgniting)
     {
-        BlockEntityWitchOven bef = this.api.World.BlockAccessor.GetBlockEntity(pos) as BlockEntityWitchOven;
+        BlockEntityWitchOven bef = api.World.BlockAccessor.GetBlockEntity(pos) as BlockEntityWitchOven;
         if (bef == null)
         {
             return EnumIgniteState.NotIgnitable;
@@ -201,11 +204,11 @@ public class BlockWitchOven : Block, IIgnitable
     }
     public void OnTryIgniteBlockOver(EntityAgent byEntity, BlockPos pos, float secondsIgniting, ref EnumHandling handling)
     {
-        BlockEntityWitchOven bef = this.api.World.BlockAccessor.GetBlockEntity(pos) as BlockEntityWitchOven;
+        BlockEntityWitchOven bef = api.World.BlockAccessor.GetBlockEntity(pos) as BlockEntityWitchOven;
         if (bef != null && !bef.canIgniteFuel)
         {
             bef.canIgniteFuel = true;
-            bef.extinguishedTotalHours = this.api.World.Calendar.TotalHours;
+            bef.extinguishedTotalHours = api.World.Calendar.TotalHours;
         }
         handling = EnumHandling.PreventDefault;
     }

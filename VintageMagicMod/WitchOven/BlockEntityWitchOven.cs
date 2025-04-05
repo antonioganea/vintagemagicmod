@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using VintageMagicMod;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
@@ -8,8 +7,9 @@ using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Server;
 using Vintagestory.API.Util;
+using Vintagestory.GameContent;
 
-namespace Vintagestory.GameContent
+namespace VintageMagicMod.WitchOven
 {
     public class BlockEntityWitchOven : BlockEntityOpenableContainer, IHeatSource, IFirePit, ITemperatureSensitive
     {
@@ -121,8 +121,8 @@ namespace Vintagestory.GameContent
             if (api.Side == EnumAppSide.Client)
             {
                 ICoreClientAPI capi = (ICoreClientAPI)api;
-                capi.Event.RegisterRenderer(this.renderer = new WitchOvenHeatRenderer(this.Pos, capi), EnumRenderStage.Opaque, "witchoven");
-                this.UpdateRenderer();
+                capi.Event.RegisterRenderer(renderer = new WitchOvenHeatRenderer(Pos, capi), EnumRenderStage.Opaque, "witchoven");
+                UpdateRenderer();
             }
         }
 
@@ -147,7 +147,7 @@ namespace Vintagestory.GameContent
 
         public bool IsBurning
         {
-            get { return this.fuelBurnTime > 0; }
+            get { return fuelBurnTime > 0; }
         }
 
 
@@ -344,7 +344,7 @@ namespace Vintagestory.GameContent
             if (nowTemp >= meltingPoint)
             {
                 float diff = nowTemp / meltingPoint;
-                inputStackCookingTime += GameMath.Clamp((int)(diff), 1, 30) * dt;
+                inputStackCookingTime += GameMath.Clamp((int)diff, 1, 30) * dt;
             }
             else
             {
@@ -504,7 +504,7 @@ namespace Vintagestory.GameContent
             if (block == null) return;
 
             Api.World.BlockAccessor.ExchangeBlock(block.Id, Pos);
-            this.Block = block;
+            Block = block;
         }
 
 
@@ -512,7 +512,7 @@ namespace Vintagestory.GameContent
         public bool canHeatInput()
         {
             return
-                canSmeltInput() || (inputStack?.ItemAttributes?["allowHeating"] != null && inputStack.ItemAttributes["allowHeating"].AsBool())
+                canSmeltInput() || inputStack?.ItemAttributes?["allowHeating"] != null && inputStack.ItemAttributes["allowHeating"].AsBool()
             ;
         }
 
@@ -552,7 +552,8 @@ namespace Vintagestory.GameContent
         {
             if (Api.Side == EnumAppSide.Client)
             {
-                toggleInventoryDialogClient(byPlayer, () => {
+                toggleInventoryDialogClient(byPlayer, () =>
+                {
                     SyncedTreeAttribute dtree = new SyncedTreeAttribute();
                     SetDialogValues(dtree);
                     clientDialog = new GuiDialogBlockEntityFirepit(DialogTitle, Inventory, Pos, dtree, Api as ICoreClientAPI);
@@ -900,65 +901,65 @@ namespace Vintagestory.GameContent
 
         }
         */
-            /*
+        /*
 
-        private MeshData getContentMesh(ItemStack contentStack, ITesselatorAPI tesselator)
+    private MeshData getContentMesh(ItemStack contentStack, ITesselatorAPI tesselator)
+    {
+        CurrentModel = EnumFirepitModel.Normal;
+
+        if (contentStack == null) return null;
+
+        if (contentStack.Collectible is IInFirepitMeshSupplier)
         {
-            CurrentModel = EnumFirepitModel.Normal;
+            EnumFirepitModel model = EnumFirepitModel.Normal;
+            MeshData mesh = (contentStack.Collectible as IInFirepitMeshSupplier).GetMeshWhenInFirepit(contentStack, Api.World, Pos, ref model);
+            this.CurrentModel = model;
 
-            if (contentStack == null) return null;
-
-            if (contentStack.Collectible is IInFirepitMeshSupplier)
+            if (mesh != null)
             {
-                EnumFirepitModel model = EnumFirepitModel.Normal;
-                MeshData mesh = (contentStack.Collectible as IInFirepitMeshSupplier).GetMeshWhenInFirepit(contentStack, Api.World, Pos, ref model);
-                this.CurrentModel = model;
-
-                if (mesh != null)
-                {
-                    return mesh;
-                }
-
+                return mesh;
             }
 
-            if (contentStack.Collectible is IInFirepitRendererSupplier)
-            {
-                EnumFirepitModel model = (contentStack.Collectible as IInFirepitRendererSupplier).GetDesiredFirepitModel(contentStack, this, contentStack == outputStack);
-                this.CurrentModel = model;
-                return null;
-            }
-
-            InFirePitProps renderProps = GetRenderProps(contentStack);
-
-            if (renderProps != null)
-            {
-                this.CurrentModel = renderProps.UseFirepitModel;
-
-                if (contentStack.Class != EnumItemClass.Item)
-                {
-                    MeshData ingredientMesh;
-                    tesselator.TesselateBlock(contentStack.Block, out ingredientMesh);
-
-                    ingredientMesh.ModelTransform(renderProps.Transform);
-
-                    // Lower by 1 voxel if extinct
-                    if (!IsBurning && renderProps.UseFirepitModel != EnumFirepitModel.Spit) ingredientMesh.Translate(0, -1 / 16f, 0);
-
-                    return ingredientMesh;
-                }
-
-                return null;
-            }
-            else
-            {
-                if (renderer.RequireSpit)
-                {
-                    this.CurrentModel = EnumFirepitModel.Spit;
-                }
-                return null; // Mesh drawing is handled by the FirepitContentsRenderer
-            }
         }
-            */
+
+        if (contentStack.Collectible is IInFirepitRendererSupplier)
+        {
+            EnumFirepitModel model = (contentStack.Collectible as IInFirepitRendererSupplier).GetDesiredFirepitModel(contentStack, this, contentStack == outputStack);
+            this.CurrentModel = model;
+            return null;
+        }
+
+        InFirePitProps renderProps = GetRenderProps(contentStack);
+
+        if (renderProps != null)
+        {
+            this.CurrentModel = renderProps.UseFirepitModel;
+
+            if (contentStack.Class != EnumItemClass.Item)
+            {
+                MeshData ingredientMesh;
+                tesselator.TesselateBlock(contentStack.Block, out ingredientMesh);
+
+                ingredientMesh.ModelTransform(renderProps.Transform);
+
+                // Lower by 1 voxel if extinct
+                if (!IsBurning && renderProps.UseFirepitModel != EnumFirepitModel.Spit) ingredientMesh.Translate(0, -1 / 16f, 0);
+
+                return ingredientMesh;
+            }
+
+            return null;
+        }
+        else
+        {
+            if (renderer.RequireSpit)
+            {
+                this.CurrentModel = EnumFirepitModel.Spit;
+            }
+            return null; // Mesh drawing is handled by the FirepitContentsRenderer
+        }
+    }
+        */
 
         public override void OnBlockUnloaded()
         {
@@ -981,7 +982,7 @@ namespace Vintagestory.GameContent
                 MeshData[] meshes = new MeshData[17];
                 ITesselatorAPI mesher = ((ICoreClientAPI)Api).Tesselator;
 
-                mesher.TesselateShape(block, API.Common.Shape.TryGet(Api, "shapes/block/wood/firepit/" + key + ".json"), out meshdata);
+                mesher.TesselateShape(block, Vintagestory.API.Common.Shape.TryGet(Api, "shapes/block/wood/firepit/" + key + ".json"), out meshdata);
             }
 
             return meshdata;
@@ -990,7 +991,7 @@ namespace Vintagestory.GameContent
         // Implementation of IHeatSource
         public float GetHeatStrength(IWorldAccessor world, BlockPos heatSourcePos, BlockPos heatReceiverPos)
         {
-            return IsBurning ? 10 : (IsSmoldering ? 0.25f : 0);
+            return IsBurning ? 10 : IsSmoldering ? 0.25f : 0;
         }
     }
 }
