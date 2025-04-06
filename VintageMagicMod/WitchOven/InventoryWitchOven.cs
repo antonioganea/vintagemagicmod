@@ -14,6 +14,8 @@ namespace Vintagestory.GameContent
     {
         ItemSlot[] slots;
         ItemSlot[] cookingSlots;
+        ItemSlot ashSlot;
+        ItemSlot bottleSlot;
         public BlockPos pos;
         int defaultStorageType = (int)(EnumItemStorageFlags.General | EnumItemStorageFlags.Agriculture | EnumItemStorageFlags.Alchemy | EnumItemStorageFlags.Jewellery | EnumItemStorageFlags.Metallurgy | EnumItemStorageFlags.Outfit);
 
@@ -67,16 +69,20 @@ namespace Vintagestory.GameContent
             // slot 1 = input
             // slot 2 = output
             // slot 3,4,5,6 = extra input slots with crucible in input
-            slots = GenEmptySlots(7);
+            slots = GenEmptySlots(9);
             cookingSlots = new ItemSlot[] { slots[3], slots[4], slots[5], slots[6] };
+            ashSlot = slots[7];
+            bottleSlot = slots[8];
             baseWeight = 4f;
 
         }
 
         public InventoryWitchOven(string className, string instanceID, ICoreAPI api) : base(className, instanceID, api)
         {
-            slots = GenEmptySlots(7);
+            slots = GenEmptySlots(9);
             cookingSlots = new ItemSlot[] { slots[3], slots[4], slots[5], slots[6] };
+            ashSlot = slots[7];
+            bottleSlot = slots[8];
             baseWeight = 4f;
         }
 

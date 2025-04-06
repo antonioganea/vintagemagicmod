@@ -130,8 +130,8 @@ namespace Vintagestory.GameContent
                     .AddDynamicText("", CairoFont.WhiteDetailText(), inputSlotBounds.RightCopy(23, 16).WithFixedSize(60, 30), "oretemp")
 
                     .AddItemSlotGrid(Inventory, SendInvPacket, 1, new int[] { 2 }, outputSlotBounds, "outputslot")
-                    .AddItemSlotGrid(Inventory, SendInvPacket, 1, new int[] { 0 }, bottleSlotBounds, "bottleslot")
-                    .AddItemSlotGrid(Inventory, SendInvPacket, 1, new int[] { 0 }, ashSlotBounds, "ashslot")
+                    .AddItemSlotGrid(Inventory, SendInvPacket, 1, new int[] { 8 }, bottleSlotBounds, "bottleslot")
+                    .AddItemSlotGrid(Inventory, SendInvPacket, 1, new int[] { 7 }, ashSlotBounds, "ashslot")
                 .EndChildElements()
                 .Compose();
 
