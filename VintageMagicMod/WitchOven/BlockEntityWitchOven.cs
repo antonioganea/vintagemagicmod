@@ -13,7 +13,7 @@ namespace VintageMagicMod.WitchOven
 {
     public class BlockEntityWitchOven : BlockEntityOpenableContainer, IHeatSource, IFirePit, ITemperatureSensitive
     {
-        internal InventorySmelting inventory;
+        internal InventoryWitchOven inventory;
 
         // Temperature before the half second tick
         public float prevFurnaceTemperature = 20;
@@ -101,7 +101,7 @@ namespace VintageMagicMod.WitchOven
 
         public BlockEntityWitchOven()
         {
-            inventory = new InventorySmelting(null, null);
+            inventory = new InventoryWitchOven(null, null);
             inventory.SlotModified += OnSlotModifid;
         }
 

@@ -37,6 +37,7 @@ namespace Vintagestory.GameContent
 
         void SetupDialog()
         {
+            // For some reason, this function gets called many times on open...
             ItemSlot hoveredSlot = capi.World.Player.InventoryManager.CurrentHoveredSlot;
             if (hoveredSlot != null && hoveredSlot.Inventory?.InventoryID != Inventory?.InventoryID)
             {
@@ -88,6 +89,8 @@ namespace Vintagestory.GameContent
             ElementBounds inputSlotBounds = ElementStdBounds.SlotGrid(EnumDialogArea.None, 0, top, 1, 1);
             ElementBounds fuelSlotBounds = ElementStdBounds.SlotGrid(EnumDialogArea.None, 0, 110 + top, 1, 1);
             ElementBounds outputSlotBounds = ElementStdBounds.SlotGrid(EnumDialogArea.None, 153, top, 1, 1);
+            ElementBounds bottleSlotBounds = ElementStdBounds.SlotGrid(EnumDialogArea.None, 153/2, top + 50, 1, 1);
+            ElementBounds ashSlotBounds = ElementStdBounds.SlotGrid(EnumDialogArea.None, 0, 110 + top + 50, 1, 1);
 
             // 2. Around all that is 10 pixel padding
             ElementBounds bgBounds = ElementBounds.Fill.WithFixedPadding(GuiStyle.ElementToDialogPadding);
@@ -127,6 +130,8 @@ namespace Vintagestory.GameContent
                     .AddDynamicText("", CairoFont.WhiteDetailText(), inputSlotBounds.RightCopy(23, 16).WithFixedSize(60, 30), "oretemp")
 
                     .AddItemSlotGrid(Inventory, SendInvPacket, 1, new int[] { 2 }, outputSlotBounds, "outputslot")
+                    .AddItemSlotGrid(Inventory, SendInvPacket, 1, new int[] { 0 }, bottleSlotBounds, "bottleslot")
+                    .AddItemSlotGrid(Inventory, SendInvPacket, 1, new int[] { 0 }, ashSlotBounds, "ashslot")
                 .EndChildElements()
                 .Compose();
 
