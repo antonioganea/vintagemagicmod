@@ -203,6 +203,8 @@ namespace Vintagestory.GameContent
             if (i == 0) return new ItemSlotSurvival(this); // Fuel
             if (i == 1) return new ItemSlotInput(this, 2);
             if (i == 2) return new ItemSlotOutput(this);
+            if (i == 7) return new ItemSlotSurvival(this);
+            if (i == 8) return new ItemSlotSurvival(this);
 
             return new ItemSlotWatertight(this, CookingSlotCapacityLitres);
         }
