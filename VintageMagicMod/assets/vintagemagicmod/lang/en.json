@@ -1,10 +1,11 @@
 {
-  "hello": "hello world!",
-  "vintagemagicmod:block-natesbigcauldron-iron": "Iron Cauldron",
-  "vintagemagicmod:block-natesbigcauldron-bismuth": "Bishuth Cauldron",
-  "vintagemagicmod:block-natesbigcauldron-copper": "Copper Cauldron",
-  "vintagemagicmod:block-natesbigcauldron-lead": "Lead Cauldron",
-  "vintagemagicmod:block-antoniocauldron": "Magic Cauldron",
-  "vintagemagicmod:item-spoon": "Spoon",
-  "vintagemagicmod:block-witchoven-*": "Witch's Oven"
+    "hello": "hello world!",
+    "vintagemagicmod:block-natesbigcauldron-iron": "Iron Cauldron",
+    "vintagemagicmod:block-natesbigcauldron-bismuth": "Bishuth Cauldron",
+    "vintagemagicmod:block-natesbigcauldron-copper": "Copper Cauldron",
+    "vintagemagicmod:block-natesbigcauldron-lead": "Lead Cauldron",
+    "vintagemagicmod:block-antoniocauldron": "Magic Cauldron",
+    "vintagemagicmod:item-spoon": "Spoon",
+    "vintagemagicmod:item-wooden_wand": "Wooden Wand",
+    "vintagemagicmod:block-witchoven-*": "Witch's Oven",
 }
