@@ -78,7 +78,7 @@ namespace VintageMagicMod.WitchOven
         // seconds it requires to melt the ore once beyond melting point
         public virtual float maxCookingTime()
         {
-            return inputSlot.Itemstack == null ? 30f : inputSlot.Itemstack.Collectible.GetMeltingDuration(Api.World, inventory, inputSlot);
+            return inputSlot.Itemstack == null ? 30f : 10.0f;// inputSlot.Itemstack.Collectible.GetMeltingDuration(Api.World, inventory, inputSlot);
         }
 
         public override string InventoryClassName
@@ -318,7 +318,7 @@ namespace VintageMagicMod.WitchOven
         {
             float oldTemp = InputStackTemp;
             float nowTemp = oldTemp;
-            float meltingPoint = inputSlot.Itemstack.Collectible.GetMeltingPoint(Api.World, inventory, inputSlot);
+            float meltingPoint = 500;// inputSlot.Itemstack.Collectible.GetMeltingPoint(Api.World, inventory, inputSlot);
 
             // Only Heat ore. Cooling happens already in the itemstack
             if (oldTemp < furnaceTemperature)
@@ -512,7 +512,7 @@ namespace VintageMagicMod.WitchOven
         public bool canHeatInput()
         {
             return
-                canSmeltInput() || inputStack?.ItemAttributes?["allowHeating"] != null && inputStack.ItemAttributes["allowHeating"].AsBool()
+                canSmeltInput();//|| inputStack?.ItemAttributes?["allowHeating"] != null && inputStack.ItemAttributes["allowHeating"].AsBool()
             ;
         }
 
@@ -526,6 +526,7 @@ namespace VintageMagicMod.WitchOven
         public bool canSmeltInput()
         {
             if (inputStack == null) return false;
+            return true;
 
             if (inputStack.Collectible.OnSmeltAttempt(inventory)) MarkDirty(true);
 
@@ -538,11 +539,55 @@ namespace VintageMagicMod.WitchOven
 
         public void smeltItems()
         {
-            inputStack.Collectible.DoSmelt(Api.World, inventory, inputSlot, outputSlot);
+            //inputStack.Collectible.DoSmelt(Api.World, inventory, inputSlot, outputSlot);
+            DoSmelt(inputStack, Api.World, inventory, inputSlot, outputSlot);
             InputStackTemp = enviromentTemperature();
             inputStackCookingTime = 0;
             MarkDirty(true);
             inputSlot.MarkDirty();
+        }
+
+
+        private void DoSmelt(ItemStack inputStack, IWorldAccessor world, ISlotProvider cookingSlotsProvider, ItemSlot inputSlot, ItemSlot outputSlot)
+        {
+            // Get the item with code "stick" from the item registry
+            Item theItem = world.GetItem(new AssetLocation("game:drygrass")); // game:drygrass
+
+            // Check if the item was found
+            if (theItem == null)
+            {
+                return;
+            }
+
+            // Create a new ItemStack of the stick item
+            ItemStack itemStack = new ItemStack(theItem, 1);
+
+            //AddItemStackToPlayerInventory((IPlayer)args.Caller.Player, stickStack);
+
+            int num = 1;
+            if (outputSlot.Itemstack == null)
+            {
+                outputSlot.Itemstack = itemStack;
+                outputSlot.Itemstack.StackSize = num * itemStack.StackSize;
+            }
+            else
+            {
+                itemStack.StackSize = num * itemStack.StackSize;
+                ItemStackMergeOperation itemStackMergeOperation = new ItemStackMergeOperation(world, EnumMouseButton.Left,
+                    (EnumModifierKey)0, EnumMergePriority.ConfirmedMerge, num * itemStack.StackSize);
+                itemStackMergeOperation.SourceSlot = new DummySlot(itemStack);
+                itemStackMergeOperation.SinkSlot = new DummySlot(outputSlot.Itemstack);
+                outputSlot.Itemstack.Collectible.TryMergeStacks(itemStackMergeOperation);
+                outputSlot.Itemstack = itemStackMergeOperation.SinkSlot.Itemstack;
+            }
+
+            inputSlot.Itemstack.StackSize -= num; // * CombustibleProps.SmeltedRatio;
+            if (inputSlot.Itemstack.StackSize <= 0)
+            {
+                inputSlot.Itemstack = null;
+            }
+
+            outputSlot.MarkDirty();
         }
 
 
@@ -698,7 +743,7 @@ namespace VintageMagicMod.WitchOven
 
             if (inputSlot.Itemstack != null)
             {
-                float meltingDuration = inputSlot.Itemstack.Collectible.GetMeltingDuration(Api.World, inventory, inputSlot);
+                float meltingDuration = 10.0f;// inputSlot.Itemstack.Collectible.GetMeltingDuration(Api.World, inventory, inputSlot);
 
                 dialogTree.SetFloat("oreTemperature", InputStackTemp);
                 dialogTree.SetFloat("maxOreCookingTime", meltingDuration);
