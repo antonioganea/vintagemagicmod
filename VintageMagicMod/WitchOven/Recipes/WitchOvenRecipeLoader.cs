@@ -31,36 +31,8 @@ namespace VintageMagicMod.WitchOven.Recipes
             if (!(api is ICoreServerAPI sapi)) return;
             this.api = sapi;
 
-            LoadAlloyRecipes();
-
-            LoadRecipes<SmithingRecipe>("smithing recipe", "recipes/smithing", (r) => sapi.RegisterSmithingRecipe(r));
-            sapi.World.Logger.StoryEvent(Lang.Get("Burning sparks..."));
-            LoadRecipes<ClayFormingRecipe>("clay forming recipe", "recipes/clayforming", (r) => sapi.RegisterClayFormingRecipe(r));
-            sapi.World.Logger.StoryEvent(Lang.Get("Molded forms..."));
-            LoadRecipes<KnappingRecipe>("knapping recipe", "recipes/knapping", (r) => sapi.RegisterKnappingRecipe(r));
-            sapi.World.Logger.StoryEvent(Lang.Get("Simple tools..."));
-
-            LoadRecipes<BarrelRecipe>("barrel recipe", "recipes/barrel", (r) => sapi.RegisterBarrelRecipe(r));
+            LoadRecipes<WitchOvenRecipe>("barrel recipe", "recipes/barrel", (r) => sapi.RegisterBarrelRecipe(r));
         }
-
-
-        public void LoadAlloyRecipes()
-        {
-            Dictionary<AssetLocation, AlloyRecipe> alloys = api.Assets.GetMany<AlloyRecipe>(api.Server.Logger, "recipes/alloy");
-
-            foreach (var val in alloys)
-            {
-                if (!val.Value.Enabled) continue;
-
-                val.Value.Resolve(api.World, "alloy recipe " + val.Key);
-                api.RegisterMetalAlloy(val.Value);
-            }
-
-            api.World.Logger.Event("{0} metal alloys loaded", alloys.Count);
-            api.World.Logger.StoryEvent(Lang.Get("Glimmers in the soil..."));
-        }
-
-
 
         public void LoadRecipes<T>(string name, string path, Action<T> RegisterMethod) where T : IRecipeBase<T>
         {
