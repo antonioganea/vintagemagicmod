@@ -26,14 +26,10 @@ namespace VintageMagicMod.WitchOven.Recipes
             return side == EnumAppSide.Server;
         }
 
-
-        bool classExclusiveRecipes = true;
         public override void AssetsLoaded(ICoreAPI api)
         {
             if (!(api is ICoreServerAPI sapi)) return;
             this.api = sapi;
-
-            classExclusiveRecipes = sapi.World.Config.GetBool("classExclusiveRecipes", true);
 
             LoadAlloyRecipes();
 
@@ -172,79 +168,6 @@ namespace VintageMagicMod.WitchOven.Recipes
                 RegisterMethod(recipe);
                 quantityRegistered++;
             }
-        }
-
-
-
-
-
-        public void LoadRecipe(AssetLocation loc, GridRecipe recipe)
-        {
-            if (!recipe.Enabled) return;
-            if (!classExclusiveRecipes) recipe.RequiresTrait = null;
-
-            if (recipe.Name == null) recipe.Name = loc;
-
-            Dictionary<string, string[]> nameToCodeMapping = recipe.GetNameToCodeMapping(api.World);
-
-            if (nameToCodeMapping.Count > 0)
-            {
-                List<GridRecipe> subRecipes = new List<GridRecipe>();
-
-                int qCombs = 0;
-                bool first = true;
-                foreach (var val2 in nameToCodeMapping)
-                {
-                    if (first) qCombs = val2.Value.Length;
-                    else qCombs *= val2.Value.Length;
-                    first = false;
-                }
-
-                first = true;
-                foreach (var val2 in nameToCodeMapping)
-                {
-                    string variantCode = val2.Key;
-                    string[] variants = val2.Value;
-
-                    for (int i = 0; i < qCombs; i++)
-                    {
-                        GridRecipe rec;
-
-                        if (first) subRecipes.Add(rec = recipe.Clone());
-                        else rec = subRecipes[i];
-
-                        foreach (CraftingRecipeIngredient ingred in rec.Ingredients.Values)
-                        {
-                            if (ingred.Name == variantCode)
-                            {
-                                ingred.Code.Path = ingred.Code.Path.Replace("*", variants[i % variants.Length]);
-                            }
-
-                            if (ingred.ReturnedStack?.Code != null)
-                            {
-                                ingred.ReturnedStack.Code.Path.Replace("{" + variantCode + "}", variants[i % variants.Length]);
-                            }
-                        }
-
-                        rec.Output.FillPlaceHolder(variantCode, variants[i % variants.Length]);
-                    }
-
-                    first = false;
-                }
-
-                foreach (GridRecipe subRecipe in subRecipes)
-                {
-                    if (!subRecipe.ResolveIngredients(api.World)) continue;
-                    api.RegisterCraftingRecipe(subRecipe);
-                }
-
-            }
-            else
-            {
-                if (!recipe.ResolveIngredients(api.World)) return;
-                api.RegisterCraftingRecipe(recipe);
-            }
-
         }
     }
 }
