@@ -7,18 +7,6 @@
         "base": "game:item/tool/wand"
     },
     "class": "vintagemagicmod.wooden_wand",
-    "tool": "sword",
-    "damagedby": [ "blockbreaking", "attacking" ],
-    "behaviors": [
-        {
-            "name": "AnimationAuthoritative",
-            "properties": {
-                "strikeSound": "game:sounds/player/strike"
-            }
-        }
-    ],
-    "attackRange": 2.5,
-    "tooltier": 4,
     "durability": 500,
     "guiTransform": {
         "translation": {
