@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using VintageMagicMod.WitchOven.Recipes;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
@@ -550,6 +551,17 @@ namespace VintageMagicMod.WitchOven
 
         private void DoSmelt(ItemStack inputStack, IWorldAccessor world, ISlotProvider cookingSlotsProvider, ItemSlot inputSlot, ItemSlot outputSlot)
         {
+
+            var recipeLoader = world.Api.ModLoader.GetModSystem<WitchOvenRecipeLoader>();
+
+            var extractedFumes = recipeLoader.TryExtractFumes(inputStack);
+
+            if (extractedFumes == null) return;
+
+
+            ItemStack itemStack = extractedFumes.Clone();
+
+            /*
             // Get the item with code "stick" from the item registry
             Item theItem = world.GetItem(new AssetLocation("game:drygrass")); // game:drygrass
 
@@ -561,6 +573,7 @@ namespace VintageMagicMod.WitchOven
 
             // Create a new ItemStack of the stick item
             ItemStack itemStack = new ItemStack(theItem, 1);
+            */
 
             //AddItemStackToPlayerInventory((IPlayer)args.Caller.Player, stickStack);
 

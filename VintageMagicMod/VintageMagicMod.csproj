@@ -53,13 +53,12 @@
   <Content Include="assets\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>
+  <Compile Remove="WitchOven\OldRecipeLoader\**" />
+  <EmbeddedResource Remove="WitchOven\OldRecipeLoader\**" />
+  <None Remove="WitchOven\OldRecipeLoader\**" />
   <Content Include="modinfo.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>
-</ItemGroup>
-
-<ItemGroup>
-  <Folder Include="assets\vintagemagicmod\recepies\witchoven\" />
 </ItemGroup>
 
 </Project>

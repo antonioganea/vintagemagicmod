@@ -16,6 +16,8 @@ namespace VintageMagicMod.WitchOven.Recipes
     {
         ICoreServerAPI api;
 
+        public List<WitchOvenRecipe> recipes = new();
+
         public override double ExecuteOrder()
         {
             return 1;
@@ -31,12 +33,32 @@ namespace VintageMagicMod.WitchOven.Recipes
             if (!(api is ICoreServerAPI sapi)) return;
             this.api = sapi;
 
-            LoadRecipes<WitchOvenRecipe>("barrel recipe", "recipes/barrel", (r) => sapi.RegisterBarrelRecipe(r));
+            LoadRecipes<WitchOvenRecipe>("witchoven recipe", "recipes/witchoven", (r) => {
+                recipes.Add(r);
+            });
+        }
+
+        public ItemStack TryExtractFumes(ItemStack stack)
+        {
+            var dummySlot = new DummySlot(stack);
+
+            ItemStack result = null;
+
+            foreach(var recipe in recipes)
+            {
+                int outputStackSize;
+                if (recipe.Matches(new ItemSlot[] { dummySlot }, out outputStackSize))
+                {
+                    result = recipe.Output.ResolvedItemstack;
+                }
+            }
+
+            return result;
         }
 
         public void LoadRecipes<T>(string name, string path, Action<T> RegisterMethod) where T : IRecipeBase<T>
         {
-            Dictionary<AssetLocation, JToken> files = api.Assets.GetMany<JToken>(api.Server.Logger, path);
+            Dictionary<AssetLocation, JToken> files = api.Assets.GetMany<JToken>(api.Server.Logger, path, VintageMagicModModSystem.Domain);
             int recipeQuantity = 0;
             int quantityRegistered = 0;
             int quantityIgnored = 0;
