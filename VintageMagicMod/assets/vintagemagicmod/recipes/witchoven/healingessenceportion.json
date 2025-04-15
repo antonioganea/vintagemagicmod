@@ -1,0 +1,10 @@
+[
+	{
+		code: "healingessenceportion",
+		sealHours: 24,
+		ingredients: [
+			{ type: "block", code: "game:flower-horsetail-free",  quantity: 1 },
+		],
+		output: { type: "item", code: "healingessenceportion", litres: 0.2 }
+	},
+]

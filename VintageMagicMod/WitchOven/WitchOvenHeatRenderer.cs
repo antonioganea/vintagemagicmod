@@ -9,9 +9,8 @@ using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
-using Vintagestory.GameContent;
 
-namespace VintageMagicMod
+namespace VintageMagicMod.WitchOven
 {
     public class WitchOvenHeatRenderer : IRenderer
     {
@@ -46,7 +45,7 @@ namespace VintageMagicMod
             hotTextureId = api.Render.GetOrLoadTexture(new AssetLocation("vintagemagicmod:block/coal/ember.png"));
             coldTextureId = api.Render.GetOrLoadTexture(new AssetLocation("vintagemagicmod:block/coal/coke.png"));
 
-            this.ownFacing = BlockFacing.FromCode(api.World.BlockAccessor.GetBlock(pos).LastCodePart(0));
+            ownFacing = BlockFacing.FromCode(api.World.BlockAccessor.GetBlock(pos).LastCodePart(0));
 
             Block block = api.World.BlockAccessor.GetBlock(pos);
             if (block.BlockId == 0) return;
