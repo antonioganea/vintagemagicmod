@@ -551,10 +551,7 @@ namespace VintageMagicMod.WitchOven
 
         private void DoSmelt(ItemStack inputStack, IWorldAccessor world, ISlotProvider cookingSlotsProvider, ItemSlot inputSlot, ItemSlot outputSlot)
         {
-
-            var recipeLoader = world.Api.ModLoader.GetModSystem<WitchOvenRecipeLoader>();
-
-            var extractedFumes = recipeLoader.TryExtractFumes(inputStack);
+            var extractedFumes = inputStack.TryExtractFumes(world.Api);
 
             if (extractedFumes == null) return;
 

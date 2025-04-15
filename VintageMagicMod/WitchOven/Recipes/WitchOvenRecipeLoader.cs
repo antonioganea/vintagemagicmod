@@ -12,20 +12,34 @@ using Vintagestory.GameContent;
 
 namespace VintageMagicMod.WitchOven.Recipes
 {
+    public static partial class ApiAdditions
+    {
+        public static ItemStack TryExtractFumes(this ItemStack stack, ICoreAPI api)
+        {
+            var dummySlot = new DummySlot(stack);
+
+            foreach (var recipe in api.GetWitchOvenRecipes())
+            {
+                int outputStackSize;
+                if (recipe.Matches(new ItemSlot[] { dummySlot }, out outputStackSize))
+                {
+                    return recipe.Output.ResolvedItemstack;
+                }
+            }
+
+            return null;
+        }
+    }
+
     public class WitchOvenRecipeLoader : ModSystem
     {
         ICoreServerAPI api;
-
-        public List<WitchOvenRecipe> recipes = new();
 
         public override double ExecuteOrder()
         {
             return 1;
         }
 
-        // NOTE : unlike the normal recipes, the witch oven recipes are NOT available on the clientside
-        // because the normal recipes are being loaded only on the server and then SENT to the client.
-        // But witch oven recipes are not sent to the clients ..
         public override bool ShouldLoad(EnumAppSide side)
         {
             return side == EnumAppSide.Server;
@@ -37,26 +51,8 @@ namespace VintageMagicMod.WitchOven.Recipes
             this.api = sapi;
 
             LoadRecipes<WitchOvenRecipe>("witchoven recipe", "recipes/witchoven", (r) => {
-                recipes.Add(r);
+                sapi.RegisterWitchOvenRecipe(r);
             });
-        }
-
-        public ItemStack TryExtractFumes(ItemStack stack)
-        {
-            var dummySlot = new DummySlot(stack);
-
-            ItemStack result = null;
-
-            foreach(var recipe in recipes)
-            {
-                int outputStackSize;
-                if (recipe.Matches(new ItemSlot[] { dummySlot }, out outputStackSize))
-                {
-                    result = recipe.Output.ResolvedItemstack;
-                }
-            }
-
-            return result;
         }
 
         public void LoadRecipes<T>(string name, string path, Action<T> RegisterMethod) where T : IRecipeBase<T>

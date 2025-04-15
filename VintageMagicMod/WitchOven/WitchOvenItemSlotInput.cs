@@ -61,7 +61,6 @@ namespace VintageMagicMod.WitchOven
 
         public bool CanBeStackedWithOutputSlotItem(ItemSlot sourceSlot, bool notifySlot = true)
         {
-            inventory.Api.Logger.Log(EnumLogType.Warning, "CanBeStackedWithOutputSlotItem");
             ItemSlot outslot = inventory[outputSlotId];
             if (outslot.Empty) return true;
 
@@ -77,38 +76,9 @@ namespace VintageMagicMod.WitchOven
             return true;
         }
 
-        private ItemStack GetResolvedItemStackAfterCooking(ItemStack itemStack)
+        private ItemStack GetResolvedItemStackAfterCooking(ItemStack theItemStack)
         {
-            inventory.Api.Logger.Log(EnumLogType.Warning, "1234");
-            if (itemStack.Collectible.CombustibleProps?.SmeltedStack?.ResolvedItemstack == null)
-            {
-                inventory.Api.Logger.Log(EnumLogType.Warning, "itemStack.Collectible.CombustibleProps?.SmeltedStack?.ResolvedItemstack == null");
-            }
-            else
-            {
-                inventory.Api.Logger.Log(EnumLogType.Warning, "itemStack.Collectible.CombustibleProps?.SmeltedStack?.ResolvedItemstack != null");
-            }
-
-            var recipeLoader = inventory.Api.ModLoader.GetModSystem<WitchOvenRecipeLoader>();
-
-            if (recipeLoader == null)
-            {
-                inventory.Api.Logger.Log(EnumLogType.Warning, "recipeLoader == null");
-                return null;
-            }
-            else
-            {
-                inventory.Api.Logger.Log(EnumLogType.Warning, "recipeLoader != null");
-            }
-
-            // nullref - recipeloader (on the clientside)
-            var extractedFumes = recipeLoader.TryExtractFumes(itemStack);
-
-            return extractedFumes;
-
-            //return itemStack.Collectible.CombustibleProps?.SmeltedStack?.ResolvedItemstack;
+            return theItemStack.TryExtractFumes(inventory.Api);
         }
-
-
     }
 }
