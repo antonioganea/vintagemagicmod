@@ -1,0 +1,37 @@
+[
+    {
+        "ingredientPattern": "S__\t_S_\t__S",
+        "ingredients": {
+            "S": {
+                "type": "item",
+                "code": "game:bone"
+            }
+        },
+        "width": 3,
+        "height": 3,
+        "output": {
+            "type": "item",
+            "code": "bone_needle",
+            "quantity": 1
+
+        }
+    },
+    {
+        "ingredientPattern": "__S\t_S_\tS__",
+        "ingredients": {
+            "S": {
+                "type": "item",
+                "code": "game:bone"
+            }
+        },
+        "width": 3,
+        "height": 3,
+        "output": {
+            "type": "item",
+            "code": "bone_needle",
+            "quantity": 1
+
+        }
+    }
+
+]
