@@ -17,6 +17,8 @@ namespace VintageMagicMod
         {
             Mod.Logger.Notification("Hello from template mod: " + api.Side);
 
+            api.RegisterItemClass(Domain + ".wooden_wand", typeof(ItemMagicWoodenWand));
+            api.RegisterItemClass(Domain + ".bone_needle", typeof(ItemBoneNeedle));
 
             api.RegisterBlockClass("BlockAntonioCauldron", typeof(BlockAntonioCauldron));
             api.RegisterBlockEntityClass("AntonioCauldron", typeof(BlockEntityAntonioCauldron));

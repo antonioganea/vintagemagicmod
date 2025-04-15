@@ -53,9 +53,11 @@
   <Content Include="assets\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>
-  <Compile Remove="WitchOven\OldRecipeLoader\**" />
-  <EmbeddedResource Remove="WitchOven\OldRecipeLoader\**" />
-  <None Remove="WitchOven\OldRecipeLoader\**" />
+  <None Remove="assets\vintagemagicmod\itemtypes\tool\bone_needle.json" />
+  <None Remove="assets\vintagemagicmod\itemtypes\tool\wooden_wand.json" />
+  <None Remove="assets\vintagemagicmod\recipes\grid\bone_needle.json" />
+  <None Remove="assets\vintagemagicmod\recipes\grid\wooden_wand.json" />
+  <None Remove="assets\vintagemagicmod\shapes\item\tool\wooden_wand.json" />
   <Content Include="modinfo.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>

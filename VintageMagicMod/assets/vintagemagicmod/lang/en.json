@@ -8,5 +8,7 @@
   "vintagemagicmod:item-spoon": "Spoon",
   "vintagemagicmod:block-witchoven-*": "Witch's Oven",
   "vintagemagicmod:item-healingessenceportion": "Essence of Healing",
-  "vintagemagicmod:incontainer-item-healingessenceportion": "Essence of Healing"
+  "vintagemagicmod:incontainer-item-healingessenceportion": "Essence of Healing",
+  "vintagemagicmod:item-wooden_wand": "Wooden Wand",
+  "vintagemagicmod:item-bone_needle": "Bone needle"
 }

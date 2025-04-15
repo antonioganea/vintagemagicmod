@@ -1,0 +1,65 @@
+{
+    "code": "bone_needle",
+    "creativeinventory": {
+        "general": [ "*" ]
+    },
+    "shape": {
+        "base": "item/tool/bone_needle"
+    },
+    "class": "vintagemagicmod.bone_needle",
+    "durability": 500,
+    "guiTransform": {
+        "translation": {
+            "x": 0,
+            "y": -31,
+            "z": 0
+        },
+        "rotation": {
+            "x": -6,
+            "y": 30,
+            "z": -42
+        },
+        "origin": {
+            "x": 0.7,
+            "y": 0,
+            "z": 0.3
+        },
+        "scale": 3.81
+    },
+    "tpHandTransform": {
+        "translation": {
+            "x": -1.4,
+            "y": -0.2,
+            "z": -1.1
+        },
+        "rotation": {
+            "x": 0,
+            "y": -17,
+            "z": 18
+        },
+        "origin": {
+            "x": 0.5,
+            "y": 0,
+            "z": 0.5
+        },
+        "scale": 0.49
+    },
+    "tpOffHandTransform": {
+        "translation": {
+            "x": -1.4,
+            "y": -0.2,
+            "z": -1.1
+        },
+        "rotation": {
+            "x": 0,
+            "y": -17,
+            "z": 18
+        },
+        "origin": {
+            "x": 0.5,
+            "y": 0,
+            "z": 0.5
+        },
+        "scale": 0.49
+    }
+}
