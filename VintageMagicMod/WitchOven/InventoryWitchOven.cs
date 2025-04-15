@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using VintageMagicMod.WitchOven;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
@@ -201,7 +202,7 @@ namespace Vintagestory.GameContent
         protected override ItemSlot NewSlot(int i)
         {
             if (i == 0) return new ItemSlotSurvival(this); // Fuel
-            if (i == 1) return new ItemSlotInput(this, 2);
+            if (i == 1) return new WitchOvenItemSlotInput(this, 2);
             if (i == 2) return new ItemSlotOutput(this);
             if (i == 7) return new ItemSlotSurvival(this);
             if (i == 8) return new ItemSlotSurvival(this);

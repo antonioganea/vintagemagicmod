@@ -23,6 +23,9 @@ namespace VintageMagicMod.WitchOven.Recipes
             return 1;
         }
 
+        // NOTE : unlike the normal recipes, the witch oven recipes are NOT available on the clientside
+        // because the normal recipes are being loaded only on the server and then SENT to the client.
+        // But witch oven recipes are not sent to the clients ..
         public override bool ShouldLoad(EnumAppSide side)
         {
             return side == EnumAppSide.Server;
