@@ -1,0 +1,56 @@
+{
+  "editor": {
+    "allAngles": false,
+    "entityTextureMode": false
+  },
+  "textureWidth": 16,
+  "textureHeight": 16,
+  "textureSizes": {
+    "bone": [16, 16]
+  },
+  "elements": [
+    {
+      "name": "base",
+      "from": [8.0, 0.0, 8.0],
+      "to": [8.0, 0.0, 8.0],
+      "rotationOrigin": [8.0, 0.0, 8.0],
+      "faces": {},
+      "children": [
+        {
+          "name": "needle",
+          "from": [-0.3, 0.0, 0.0],
+          "to": [0.3, 6.0, 0.5],
+          "rotationOrigin": [0.0, 0.0, 0.0],
+          "rotationX": -10.0,
+          "rotationZ": 20.0,
+          "faces": {
+            "north": {
+              "texture": "#bone",
+              "uv": [0.0, 2.0, 1.0, 8.0]
+            },
+            "east": {
+              "texture": "#bone",
+              "uv": [1.0, 2.0, 2.0, 8.0]
+            },
+            "south": {
+              "texture": "#bone",
+              "uv": [0.0, 2.0, 1.0, 8.0]
+            },
+            "west": {
+              "texture": "#bone",
+              "uv": [1.0, 2.0, 2.0, 8.0]
+            },
+            "up": {
+              "texture": "#bone",
+              "uv": [0.0, 1.0, 1.0, 2.0]
+            },
+            "down": {
+              "texture": "#bone",
+              "uv": [0.0, 8.0, 1.0, 9.0]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
