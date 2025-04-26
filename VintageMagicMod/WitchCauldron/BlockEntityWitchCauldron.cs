@@ -9,7 +9,7 @@ using Vintagestory.GameContent;
 namespace VintageMagicMod.WitchCauldron
 {
     // Token: 0x02000356 RID: 854
-    public class BlockEntityAntonioCauldron : BlockEntityLiquidContainer
+    public class BlockEntityWitchCauldron : BlockEntityLiquidContainer
     {
         // Token: 0x17000350 RID: 848
         // (get) Token: 0x06001BFC RID: 7164 RVA: 0x00100D8B File Offset: 0x000FEF8B
@@ -38,7 +38,7 @@ namespace VintageMagicMod.WitchCauldron
         }
 
         // Token: 0x06001C00 RID: 7168 RVA: 0x00100DCC File Offset: 0x000FEFCC
-        public BlockEntityAntonioCauldron()
+        public BlockEntityWitchCauldron()
         {
             inventory = new InventoryGeneric(2, null, null, delegate (int id, InventoryGeneric self)
             {
@@ -96,8 +96,8 @@ namespace VintageMagicMod.WitchCauldron
         public override void Initialize(ICoreAPI api)
         {
             base.Initialize(api);
-            ownBlock = Block as BlockAntonioCauldron;
-            BlockAntonioCauldron blockBarrel = ownBlock;
+            ownBlock = Block as BlockWitchCauldron;
+            BlockWitchCauldron blockBarrel = ownBlock;
             bool flag;
             if (blockBarrel == null)
             {
@@ -134,7 +134,7 @@ namespace VintageMagicMod.WitchCauldron
             }
             if (slotId == 0 || slotId == 1)
             {
-                GuiDialogAntonioCauldron guiDialogBarrel = invDialog;
+                GuiDialogWitchCauldron guiDialogBarrel = invDialog;
                 if (guiDialogBarrel != null)
                 {
                     guiDialogBarrel.UpdateContents();
@@ -179,7 +179,7 @@ namespace VintageMagicMod.WitchCauldron
                             Api.World.BlockAccessor.MarkBlockEntityDirty(Pos);
                         }
                     }
-                    GuiDialogAntonioCauldron guiDialogBarrel = invDialog;
+                    GuiDialogWitchCauldron guiDialogBarrel = invDialog;
                     if (guiDialogBarrel != null)
                     {
                         guiDialogBarrel.UpdateContents();
@@ -243,7 +243,7 @@ namespace VintageMagicMod.WitchCauldron
             {
                 base.OnBlockBroken(byPlayer);
             }
-            GuiDialogAntonioCauldron guiDialogBarrel = invDialog;
+            GuiDialogWitchCauldron guiDialogBarrel = invDialog;
             if (guiDialogBarrel != null)
             {
                 guiDialogBarrel.TryClose();
@@ -283,7 +283,7 @@ namespace VintageMagicMod.WitchCauldron
             if (invDialog == null)
             {
                 ICoreClientAPI capi = Api as ICoreClientAPI;
-                invDialog = new GuiDialogAntonioCauldron(Lang.Get("Barrel", Array.Empty<object>()), Inventory, Pos, Api as ICoreClientAPI);
+                invDialog = new GuiDialogWitchCauldron(Lang.Get("Barrel", Array.Empty<object>()), Inventory, Pos, Api as ICoreClientAPI);
                 invDialog.OnClosed += delegate
                 {
                     invDialog = null;
@@ -339,12 +339,12 @@ namespace VintageMagicMod.WitchCauldron
             if (packetid == 1001)
             {
                 (Api.World as IClientWorldAccessor).Player.InventoryManager.CloseInventory(Inventory);
-                GuiDialogAntonioCauldron guiDialogBarrel = invDialog;
+                GuiDialogWitchCauldron guiDialogBarrel = invDialog;
                 if (guiDialogBarrel != null)
                 {
                     guiDialogBarrel.TryClose();
                 }
-                GuiDialogAntonioCauldron guiDialogBarrel2 = invDialog;
+                GuiDialogWitchCauldron guiDialogBarrel2 = invDialog;
                 if (guiDialogBarrel2 != null)
                 {
                     guiDialogBarrel2.Dispose();
@@ -363,7 +363,7 @@ namespace VintageMagicMod.WitchCauldron
             {
                 currentMesh = GenMesh();
                 MarkDirty(true, null);
-                GuiDialogAntonioCauldron guiDialogBarrel = invDialog;
+                GuiDialogWitchCauldron guiDialogBarrel = invDialog;
                 if (guiDialogBarrel != null)
                 {
                     guiDialogBarrel.UpdateContents();
@@ -407,7 +407,7 @@ namespace VintageMagicMod.WitchCauldron
         public override void OnBlockUnloaded()
         {
             base.OnBlockUnloaded();
-            GuiDialogAntonioCauldron guiDialogBarrel = invDialog;
+            GuiDialogWitchCauldron guiDialogBarrel = invDialog;
             if (guiDialogBarrel == null)
             {
                 return;
@@ -423,13 +423,13 @@ namespace VintageMagicMod.WitchCauldron
         }
 
         // Token: 0x04000EDB RID: 3803
-        private GuiDialogAntonioCauldron invDialog;
+        private GuiDialogWitchCauldron invDialog;
 
         // Token: 0x04000EDC RID: 3804
         private MeshData currentMesh;
 
         // Token: 0x04000EDD RID: 3805
-        private BlockAntonioCauldron ownBlock;
+        private BlockWitchCauldron ownBlock;
 
         // Token: 0x04000EDE RID: 3806
         public bool Sealed;

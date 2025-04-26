@@ -13,7 +13,7 @@ using Vintagestory.GameContent;
 
 namespace VintageMagicMod.WitchCauldron
 {
-    public class BlockAntonioCauldron : BlockLiquidContainerBase
+    public class BlockWitchCauldron : BlockLiquidContainerBase
     {
         public override bool AllowHeldLiquidTransfer
         {
@@ -401,7 +401,7 @@ namespace VintageMagicMod.WitchCauldron
                         Itemstacks = lstacks,
                         GetMatchingStacks = delegate(WorldInteraction wi, BlockSelection bs, EntitySelection ws)
                         {
-                            BlockEntityAntonioCauldron blockEntityBarrel = api.World.BlockAccessor.GetBlockEntity(bs.Position) as BlockEntityAntonioCauldron;
+                            BlockEntityWitchCauldron blockEntityBarrel = api.World.BlockAccessor.GetBlockEntity(bs.Position) as BlockEntityWitchCauldron;
                             if (blockEntityBarrel == null || blockEntityBarrel.Sealed)
                             {
                                 return null;
@@ -417,7 +417,7 @@ namespace VintageMagicMod.WitchCauldron
                         Itemstacks = linenStack,
                         GetMatchingStacks = delegate(WorldInteraction wi, BlockSelection bs, EntitySelection ws)
                         {
-                            BlockEntityAntonioCauldron blockEntityBarrel2 = api.World.BlockAccessor.GetBlockEntity(bs.Position) as BlockEntityAntonioCauldron;
+                            BlockEntityWitchCauldron blockEntityBarrel2 = api.World.BlockAccessor.GetBlockEntity(bs.Position) as BlockEntityWitchCauldron;
                             string text;
                             if (blockEntityBarrel2 == null)
                             {
@@ -457,10 +457,10 @@ namespace VintageMagicMod.WitchCauldron
 
         public override WorldInteraction[] GetPlacedBlockInteractionHelp(IWorldAccessor world, BlockSelection blockSel, IPlayer forPlayer)
         {
-            BlockEntityAntonioCauldron bebarrel = null;
+            BlockEntityWitchCauldron bebarrel = null;
             if (blockSel.Position != null)
             {
-                bebarrel = world.BlockAccessor.GetBlockEntity(blockSel.Position) as BlockEntityAntonioCauldron;
+                bebarrel = world.BlockAccessor.GetBlockEntity(blockSel.Position) as BlockEntityWitchCauldron;
             }
             if (bebarrel != null && bebarrel.Sealed)
             {
@@ -480,10 +480,10 @@ namespace VintageMagicMod.WitchCauldron
             {
                 return false;
             }
-            BlockEntityAntonioCauldron bebarrel = null;
+            BlockEntityWitchCauldron bebarrel = null;
             if (blockSel.Position != null)
             {
-                bebarrel = world.BlockAccessor.GetBlockEntity(blockSel.Position) as BlockEntityAntonioCauldron;
+                bebarrel = world.BlockAccessor.GetBlockEntity(blockSel.Position) as BlockEntityWitchCauldron;
             }
             if (bebarrel != null && bebarrel.Sealed)
             {
@@ -533,7 +533,7 @@ namespace VintageMagicMod.WitchCauldron
             {
                 text = "";
             }
-            BlockEntityAntonioCauldron bebarrel = world.BlockAccessor.GetBlockEntity(pos) as BlockEntityAntonioCauldron;
+            BlockEntityWitchCauldron bebarrel = world.BlockAccessor.GetBlockEntity(pos) as BlockEntityWitchCauldron;
             if (bebarrel != null)
             {
                 ItemSlot slot = bebarrel.Inventory[0];

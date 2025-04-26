@@ -1,8 +1,8 @@
 {
 
 	"code": "witchcauldron",
-	"class": "BlockAntonioCauldron",
-	"entityClass": "AntonioCauldron",
+	"class": "BlockWitchCauldron",
+	"entityClass": "WitchCauldron",
 	"behaviors": [
 		{ "name": "Lockable" },
 		{ "name": "UnstableFalling" }

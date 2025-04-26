@@ -8,7 +8,7 @@ using Vintagestory.GameContent;
 
 namespace VintageMagicMod.WitchCauldron;
 
-public class GuiDialogAntonioCauldron : GuiDialogBlockEntity
+public class GuiDialogWitchCauldron : GuiDialogBlockEntity
 {
     private EnumPosFlag screenPos;
 
@@ -20,7 +20,7 @@ public class GuiDialogAntonioCauldron : GuiDialogBlockEntity
 
     public override double DrawOrder => 0.2;
 
-    public GuiDialogAntonioCauldron(string dialogTitle, InventoryBase inventory, BlockPos blockEntityPos, ICoreClientAPI capi)
+    public GuiDialogWitchCauldron(string dialogTitle, InventoryBase inventory, BlockPos blockEntityPos, ICoreClientAPI capi)
         : base(dialogTitle, inventory, blockEntityPos, capi)
     {
         _ = IsDuplicate;
@@ -78,7 +78,7 @@ public class GuiDialogAntonioCauldron : GuiDialogBlockEntity
                 ItemStack stack = Inventory[0].Itemstack;
                 contents = contents + "\n" + Lang.Get("barrelcontents-items", stack.StackSize, stack.GetName());
             }
-            BlockEntityAntonioCauldron bebarrel = capi.World.BlockAccessor.GetBlockEntity(BlockEntityPosition) as BlockEntityAntonioCauldron;
+            BlockEntityWitchCauldron bebarrel = capi.World.BlockAccessor.GetBlockEntity(BlockEntityPosition) as BlockEntityWitchCauldron;
             if (bebarrel.CurrentRecipe != null)
             {
                 ItemStack outStack = bebarrel.CurrentRecipe.Output.ResolvedItemstack;
@@ -110,7 +110,7 @@ public class GuiDialogAntonioCauldron : GuiDialogBlockEntity
         ItemSlot liquidSlot = Inventory[1];
         if (!liquidSlot.Empty)
         {
-            BlockEntityAntonioCauldron obj = capi.World.BlockAccessor.GetBlockEntity(BlockEntityPosition) as BlockEntityAntonioCauldron;
+            BlockEntityWitchCauldron obj = capi.World.BlockAccessor.GetBlockEntity(BlockEntityPosition) as BlockEntityWitchCauldron;
             float itemsPerLitre = 1f;
             int capacity = obj.CapacityLitres;
             WaterTightContainableProps props = BlockLiquidContainerBase.GetContainableProps(liquidSlot.Itemstack);
@@ -138,7 +138,7 @@ public class GuiDialogAntonioCauldron : GuiDialogBlockEntity
 
     private bool onSealClick()
     {
-        if (!(capi.World.BlockAccessor.GetBlockEntity(BlockEntityPosition) is BlockEntityAntonioCauldron bebarrel) || bebarrel.Sealed)
+        if (!(capi.World.BlockAccessor.GetBlockEntity(BlockEntityPosition) is BlockEntityWitchCauldron bebarrel) || bebarrel.Sealed)
         {
             return true;
         }
