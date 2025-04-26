@@ -4,8 +4,9 @@ using Vintagestory.API.Client;
 using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
+using Vintagestory.GameContent;
 
-namespace Vintagestory.GameContent;
+namespace VintageMagicMod.WitchCauldron;
 
 public class GuiDialogAntonioCauldron : GuiDialogBlockEntity
 {
@@ -22,7 +23,7 @@ public class GuiDialogAntonioCauldron : GuiDialogBlockEntity
     public GuiDialogAntonioCauldron(string dialogTitle, InventoryBase inventory, BlockPos blockEntityPos, ICoreClientAPI capi)
         : base(dialogTitle, inventory, blockEntityPos, capi)
     {
-        _ = base.IsDuplicate;
+        _ = IsDuplicate;
     }
 
     private void SetupDialog()
@@ -37,10 +38,10 @@ public class GuiDialogAntonioCauldron : GuiDialogBlockEntity
         ElementBounds bgBounds = ElementBounds.Fill.WithFixedPadding(GuiStyle.ElementToDialogPadding);
         bgBounds.BothSizing = ElementSizing.FitToChildren;
         bgBounds.WithChildren(barrelBoundsLeft, barrelBoundsRight);
-        ElementBounds dialogBounds = ElementStdBounds.AutosizedMainDialog.WithFixedAlignmentOffset(IsRight(screenPos) ? (0.0 - GuiStyle.DialogToScreenPadding) : GuiStyle.DialogToScreenPadding, 0.0).WithAlignment(IsRight(screenPos) ? EnumDialogArea.RightMiddle : EnumDialogArea.LeftMiddle);
-        base.SingleComposer = capi.Gui.CreateCompo("blockentityantoniocauldron" + base.BlockEntityPosition, dialogBounds).AddShadedDialogBG(bgBounds).AddDialogTitleBar(DialogTitle, OnTitleBarClose)
+        ElementBounds dialogBounds = ElementStdBounds.AutosizedMainDialog.WithFixedAlignmentOffset(IsRight(screenPos) ? 0.0 - GuiStyle.DialogToScreenPadding : GuiStyle.DialogToScreenPadding, 0.0).WithAlignment(IsRight(screenPos) ? EnumDialogArea.RightMiddle : EnumDialogArea.LeftMiddle);
+        SingleComposer = capi.Gui.CreateCompo("blockentityantoniocauldron" + BlockEntityPosition, dialogBounds).AddShadedDialogBG(bgBounds).AddDialogTitleBar(DialogTitle, OnTitleBarClose)
             .BeginChildElements(bgBounds)
-            .AddItemSlotGrid(base.Inventory, SendInvPacket, 1, new int[1], inputSlotBounds, "inputSlot")
+            .AddItemSlotGrid(Inventory, SendInvPacket, 1, new int[1], inputSlotBounds, "inputSlot")
             .AddSmallButton(Lang.Get("barrel-seal"), onSealClick, ElementBounds.Fixed(0.0, 100.0, 80.0, 25.0))
             .AddInset(fullnessMeterBounds.ForkBoundingParent(2.0, 2.0, 2.0, 2.0), 2)
             .AddDynamicCustomDraw(fullnessMeterBounds, fullnessMeterDraw, "liquidBar")
@@ -52,41 +53,41 @@ public class GuiDialogAntonioCauldron : GuiDialogBlockEntity
     private string getContentsText()
     {
         string contents = Lang.Get("Contents:");
-        if (base.Inventory[0].Empty && base.Inventory[1].Empty)
+        if (Inventory[0].Empty && Inventory[1].Empty)
         {
             contents = contents + "\n" + Lang.Get("nobarrelcontents");
         }
         else
         {
-            if (!base.Inventory[1].Empty)
+            if (!Inventory[1].Empty)
             {
-                ItemStack stack2 = base.Inventory[1].Itemstack;
+                ItemStack stack2 = Inventory[1].Itemstack;
                 WaterTightContainableProps props2 = BlockLiquidContainerBase.GetContainableProps(stack2);
                 if (props2 != null)
                 {
                     string incontainername2 = Lang.Get(stack2.Collectible.Code.Domain + ":incontainer-" + stack2.Class.ToString().ToLowerInvariant() + "-" + stack2.Collectible.Code.Path);
-                    contents = contents + "\n" + Lang.Get((props2.MaxStackSize > 0) ? "barrelcontents-items" : "barrelcontents-liquid", (float)stack2.StackSize / props2.ItemsPerLitre, incontainername2);
+                    contents = contents + "\n" + Lang.Get(props2.MaxStackSize > 0 ? "barrelcontents-items" : "barrelcontents-liquid", stack2.StackSize / props2.ItemsPerLitre, incontainername2);
                 }
                 else
                 {
                     contents = contents + "\n" + Lang.Get("barrelcontents-items", stack2.StackSize, stack2.GetName());
                 }
             }
-            if (!base.Inventory[0].Empty)
+            if (!Inventory[0].Empty)
             {
-                ItemStack stack = base.Inventory[0].Itemstack;
+                ItemStack stack = Inventory[0].Itemstack;
                 contents = contents + "\n" + Lang.Get("barrelcontents-items", stack.StackSize, stack.GetName());
             }
-            BlockEntityAntonioCauldron bebarrel = capi.World.BlockAccessor.GetBlockEntity(base.BlockEntityPosition) as BlockEntityAntonioCauldron;
+            BlockEntityAntonioCauldron bebarrel = capi.World.BlockAccessor.GetBlockEntity(BlockEntityPosition) as BlockEntityAntonioCauldron;
             if (bebarrel.CurrentRecipe != null)
             {
                 ItemStack outStack = bebarrel.CurrentRecipe.Output.ResolvedItemstack;
                 WaterTightContainableProps props = BlockLiquidContainerBase.GetContainableProps(outStack);
-                string timeText = ((bebarrel.CurrentRecipe.SealHours > 24.0) ? Lang.Get("{0} days", Math.Round(bebarrel.CurrentRecipe.SealHours / (double)capi.World.Calendar.HoursPerDay, 1)) : Lang.Get("{0} hours", bebarrel.CurrentRecipe.SealHours));
+                string timeText = bebarrel.CurrentRecipe.SealHours > 24.0 ? Lang.Get("{0} days", Math.Round(bebarrel.CurrentRecipe.SealHours / (double)capi.World.Calendar.HoursPerDay, 1)) : Lang.Get("{0} hours", bebarrel.CurrentRecipe.SealHours);
                 if (props != null)
                 {
                     string incontainername = Lang.Get(outStack.Collectible.Code.Domain + ":incontainer-" + outStack.Class.ToString().ToLowerInvariant() + "-" + outStack.Collectible.Code.Path);
-                    float litres = (float)bebarrel.CurrentOutSize / props.ItemsPerLitre;
+                    float litres = bebarrel.CurrentOutSize / props.ItemsPerLitre;
                     contents = contents + "\n\n" + Lang.Get("Will turn into {0} litres of {1} after {2} of sealing.", litres, incontainername, timeText);
                 }
                 else
@@ -100,16 +101,16 @@ public class GuiDialogAntonioCauldron : GuiDialogBlockEntity
 
     public void UpdateContents()
     {
-        base.SingleComposer.GetCustomDraw("liquidBar").Redraw();
-        base.SingleComposer.GetDynamicText("contentText").SetNewText(getContentsText());
+        SingleComposer.GetCustomDraw("liquidBar").Redraw();
+        SingleComposer.GetDynamicText("contentText").SetNewText(getContentsText());
     }
 
     private void fullnessMeterDraw(Context ctx, ImageSurface surface, ElementBounds currentBounds)
     {
-        ItemSlot liquidSlot = base.Inventory[1];
+        ItemSlot liquidSlot = Inventory[1];
         if (!liquidSlot.Empty)
         {
-            BlockEntityAntonioCauldron obj = capi.World.BlockAccessor.GetBlockEntity(base.BlockEntityPosition) as BlockEntityAntonioCauldron;
+            BlockEntityAntonioCauldron obj = capi.World.BlockAccessor.GetBlockEntity(BlockEntityPosition) as BlockEntityAntonioCauldron;
             float itemsPerLitre = 1f;
             int capacity = obj.CapacityLitres;
             WaterTightContainableProps props = BlockLiquidContainerBase.GetContainableProps(liquidSlot.Itemstack);
@@ -118,7 +119,7 @@ public class GuiDialogAntonioCauldron : GuiDialogBlockEntity
                 itemsPerLitre = props.ItemsPerLitre;
                 capacity = Math.Max(capacity, props.MaxStackSize);
             }
-            float fullnessRelative = (float)liquidSlot.StackSize / itemsPerLitre / (float)capacity;
+            float fullnessRelative = liquidSlot.StackSize / itemsPerLitre / capacity;
             double offY = (double)(1f - fullnessRelative) * currentBounds.InnerHeight;
             ctx.Rectangle(0.0, offY, currentBounds.InnerWidth, currentBounds.InnerHeight - offY);
             CompositeTexture tex = props?.Texture ?? liquidSlot.Itemstack.Collectible.Attributes?["inContainerTexture"].AsObject<CompositeTexture>(null, liquidSlot.Itemstack.Collectible.Code.Domain);
@@ -137,7 +138,7 @@ public class GuiDialogAntonioCauldron : GuiDialogBlockEntity
 
     private bool onSealClick()
     {
-        if (!(capi.World.BlockAccessor.GetBlockEntity(base.BlockEntityPosition) is BlockEntityAntonioCauldron bebarrel) || bebarrel.Sealed)
+        if (!(capi.World.BlockAccessor.GetBlockEntity(BlockEntityPosition) is BlockEntityAntonioCauldron bebarrel) || bebarrel.Sealed)
         {
             return true;
         }
@@ -146,15 +147,15 @@ public class GuiDialogAntonioCauldron : GuiDialogBlockEntity
             return true;
         }
         bebarrel.SealBarrel();
-        capi.Network.SendBlockEntityPacket(base.BlockEntityPosition, 1337);
-        capi.World.PlaySoundAt(new AssetLocation("sounds/player/seal", "game"), base.BlockEntityPosition, 0.4);
+        capi.Network.SendBlockEntityPacket(BlockEntityPosition, 1337);
+        capi.World.PlaySoundAt(new AssetLocation("sounds/player/seal", "game"), BlockEntityPosition, 0.4);
         TryClose();
         return true;
     }
 
     private void SendInvPacket(object packet)
     {
-        capi.Network.SendBlockEntityPacket(base.BlockEntityPosition.X, base.BlockEntityPosition.Y, base.BlockEntityPosition.Z, packet);
+        capi.Network.SendBlockEntityPacket(BlockEntityPosition.X, BlockEntityPosition.Y, BlockEntityPosition.Z, packet);
     }
 
     private void OnTitleBarClose()
@@ -172,7 +173,7 @@ public class GuiDialogAntonioCauldron : GuiDialogBlockEntity
 
     public override void OnGuiClosed()
     {
-        base.SingleComposer.GetSlotGrid("inputSlot").OnGuiClosed(capi);
+        SingleComposer.GetSlotGrid("inputSlot").OnGuiClosed(capi);
         base.OnGuiClosed();
         FreePos("smallblockgui", screenPos);
     }

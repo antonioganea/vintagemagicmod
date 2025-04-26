@@ -4,6 +4,7 @@ using Vintagestory.API.Config;
 using Vintagestory.API.Server;
 using Vintagestory.GameContent;
 using VintageMagicMod.WitchOven;
+using VintageMagicMod.WitchCauldron;
 
 namespace VintageMagicMod
 {

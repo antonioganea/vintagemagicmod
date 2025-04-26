@@ -9,8 +9,9 @@ using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 using Vintagestory.API.Util;
+using Vintagestory.GameContent;
 
-namespace Vintagestory.GameContent
+namespace VintageMagicMod.WitchCauldron
 {
     public class BlockAntonioCauldron : BlockLiquidContainerBase
     {
@@ -42,7 +43,7 @@ namespace Vintagestory.GameContent
         {
             object obj;
             Dictionary<string, MultiTextureMeshRef> meshrefs;
-            if (capi.ObjectCache.TryGetValue("barrelMeshRefs" + this.Code, out obj))
+            if (capi.ObjectCache.TryGetValue("barrelMeshRefs" + Code, out obj))
             {
                 meshrefs = obj as Dictionary<string, MultiTextureMeshRef>;
             }
@@ -51,27 +52,27 @@ namespace Vintagestory.GameContent
                 // These lines below were modified from dnSPY code (trying to do 2 assignments in one line) ~ antonio
                 //meshrefs = (capi.ObjectCache["barrelMeshRefs" + this.Code] = new Dictionary<string, MultiTextureMeshRef>());
                 meshrefs = new Dictionary<string, MultiTextureMeshRef>();
-                capi.ObjectCache["barrelMeshRefs" + this.Code] = meshrefs;
+                capi.ObjectCache["barrelMeshRefs" + Code] = meshrefs;
             }
-            ItemStack[] contentStacks = this.GetContents(capi.World, itemstack);
+            ItemStack[] contentStacks = GetContents(capi.World, itemstack);
             if (contentStacks == null || contentStacks.Length == 0)
             {
                 return;
             }
             bool issealed = itemstack.Attributes.GetBool("sealed", false);
-            string meshkey = this.GetBarrelMeshkey(contentStacks[0], (contentStacks.Length > 1) ? contentStacks[1] : null);
+            string meshkey = GetBarrelMeshkey(contentStacks[0], contentStacks.Length > 1 ? contentStacks[1] : null);
             MultiTextureMeshRef meshRef;
             if (!meshrefs.TryGetValue(meshkey, out meshRef))
             {
-                MeshData meshdata = this.GenMesh(contentStacks[0], (contentStacks.Length > 1) ? contentStacks[1] : null, issealed, null);
-                meshRef = (meshrefs[meshkey] = capi.Render.UploadMultiTextureMesh(meshdata));
+                MeshData meshdata = GenMesh(contentStacks[0], contentStacks.Length > 1 ? contentStacks[1] : null, issealed, null);
+                meshRef = meshrefs[meshkey] = capi.Render.UploadMultiTextureMesh(meshdata);
             }
             renderinfo.ModelRef = meshRef;
         }
 
         public string GetBarrelMeshkey(ItemStack contentStack, ItemStack liquidStack)
         {
-            return ((contentStack != null) ? new int?(contentStack.StackSize) : null).ToString() + "x" + ((contentStack != null) ? new int?(contentStack.GetHashCode()) : null).ToString() + ((liquidStack != null) ? new int?(liquidStack.StackSize) : null).ToString() + "x" + ((liquidStack != null) ? new int?(liquidStack.GetHashCode()) : null).ToString();
+            return (contentStack != null ? new int?(contentStack.StackSize) : null).ToString() + "x" + (contentStack != null ? new int?(contentStack.GetHashCode()) : null).ToString() + (liquidStack != null ? new int?(liquidStack.StackSize) : null).ToString() + "x" + (liquidStack != null ? new int?(liquidStack.GetHashCode()) : null).ToString();
         }
 
         public override void OnUnloaded(ICoreAPI api)
@@ -84,7 +85,7 @@ namespace Vintagestory.GameContent
             object obj;
             if (capi.ObjectCache.TryGetValue("barrelMeshRefs", out obj))
             {
-                foreach (KeyValuePair<int, MultiTextureMeshRef> val in (obj as Dictionary<int, MultiTextureMeshRef>))
+                foreach (KeyValuePair<int, MultiTextureMeshRef> val in obj as Dictionary<int, MultiTextureMeshRef>)
                 {
                     val.Value.Dispose();
                 }
@@ -95,7 +96,7 @@ namespace Vintagestory.GameContent
         public override void OnBlockBroken(IWorldAccessor world, BlockPos pos, IPlayer byPlayer, float dropQuantityMultiplier = 1f)
         {
             bool preventDefault = false;
-            foreach (BlockBehavior blockBehavior in this.BlockBehaviors)
+            foreach (BlockBehavior blockBehavior in BlockBehaviors)
             {
                 EnumHandling handled = EnumHandling.PassThrough;
                 blockBehavior.OnBlockBroken(world, pos, byPlayer, ref handled);
@@ -122,9 +123,9 @@ namespace Vintagestory.GameContent
                 {
                     world.SpawnItemEntity(drops[i], pos, null);
                 }
-                world.PlaySoundAt(this.Sounds.GetBreakSound(byPlayer), pos, 0.0, byPlayer, true, 32f, 1f);
+                world.PlaySoundAt(Sounds.GetBreakSound(byPlayer), pos, 0.0, byPlayer, true, 32f, 1f);
             }
-            if (this.EntityClass != null)
+            if (EntityClass != null)
             {
                 BlockEntity entity = world.BlockAccessor.GetBlockEntity(pos);
                 if (entity != null)
@@ -151,8 +152,8 @@ namespace Vintagestory.GameContent
 
         public MeshData GenMesh(ItemStack contentStack, ItemStack liquidContentStack, bool issealed, BlockPos forBlockPos = null)
         {
-            ICoreClientAPI coreClientAPI = this.api as ICoreClientAPI;
-            Shape shape = Vintagestory.API.Common.Shape.TryGet(coreClientAPI, issealed ? this.sealedShape : this.emptyShape);
+            ICoreClientAPI coreClientAPI = api as ICoreClientAPI;
+            Shape shape = Vintagestory.API.Common.Shape.TryGet(coreClientAPI, issealed ? sealedShape : emptyShape);
             MeshData barrelMesh;
 
             coreClientAPI.Tesselator.TesselateShape(this, shape, out barrelMesh, null, null, null);
@@ -166,13 +167,13 @@ namespace Vintagestory.GameContent
                 else
                 {
                     JsonObject itemAttributes = liquidContentStack.ItemAttributes;
-                    jsonObject = ((itemAttributes != null) ? itemAttributes["waterTightContainerProps"] : null);
+                    jsonObject = itemAttributes != null ? itemAttributes["waterTightContainerProps"] : null;
                 }
                 JsonObject containerProps = jsonObject;
                 MeshData meshData;
-                if ((meshData = this.getContentMeshFromAttributes(contentStack, liquidContentStack, forBlockPos)) == null)
+                if ((meshData = getContentMeshFromAttributes(contentStack, liquidContentStack, forBlockPos)) == null)
                 {
-                    meshData = this.getContentMeshLiquids(contentStack, liquidContentStack, forBlockPos, containerProps) ?? this.getContentMesh(contentStack, forBlockPos, this.contentsShape);
+                    meshData = getContentMeshLiquids(contentStack, liquidContentStack, forBlockPos, containerProps) ?? getContentMesh(contentStack, forBlockPos, contentsShape);
                 }
                 MeshData contentMesh = meshData;
                 if (contentMesh != null)
@@ -197,12 +198,12 @@ namespace Vintagestory.GameContent
             bool isliquid = containerProps != null && containerProps.Exists;
             if (liquidContentStack != null && (isliquid || contentStack == null))
             {
-                AssetLocation shapefilepath = this.contentsShape;
+                AssetLocation shapefilepath = contentsShape;
                 if (isliquid)
                 {
-                    shapefilepath = (isopaque ? this.opaqueLiquidContentsShape : this.liquidContentsShape);
+                    shapefilepath = isopaque ? opaqueLiquidContentsShape : liquidContentsShape;
                 }
-                return this.getContentMesh(liquidContentStack, forBlockPos, shapefilepath);
+                return getContentMesh(liquidContentStack, forBlockPos, shapefilepath);
             }
             return null;
         }
@@ -212,11 +213,11 @@ namespace Vintagestory.GameContent
             if (liquidContentStack != null)
             {
                 JsonObject itemAttributes = liquidContentStack.ItemAttributes;
-                if (((itemAttributes != null) ? new bool?(itemAttributes["inBarrelShape"].Exists) : null).GetValueOrDefault())
+                if ((itemAttributes != null ? new bool?(itemAttributes["inBarrelShape"].Exists) : null).GetValueOrDefault())
                 {
                     JsonObject itemAttributes2 = liquidContentStack.ItemAttributes;
-                    AssetLocation loc = AssetLocation.Create((itemAttributes2 != null) ? itemAttributes2["inBarrelShape"].AsString(null) : null, contentStack.Collectible.Code.Domain).WithPathPrefixOnce("shapes").WithPathAppendixOnce(".json");
-                    return this.getContentMesh(contentStack, forBlockPos, loc);
+                    AssetLocation loc = AssetLocation.Create(itemAttributes2 != null ? itemAttributes2["inBarrelShape"].AsString(null) : null, contentStack.Collectible.Code.Domain).WithPathPrefixOnce("shapes").WithPathAppendixOnce(".json");
+                    return getContentMesh(contentStack, forBlockPos, loc);
                 }
             }
             return null;
@@ -224,8 +225,8 @@ namespace Vintagestory.GameContent
 
         protected MeshData getContentMesh(ItemStack stack, BlockPos forBlockPos, AssetLocation shapefilepath)
         {
-            ICoreClientAPI capi = this.api as ICoreClientAPI;
-            WaterTightContainableProps props = BlockLiquidContainerBase.GetContainableProps(stack);
+            ICoreClientAPI capi = api as ICoreClientAPI;
+            WaterTightContainableProps props = GetContainableProps(stack);
             ITexPositionSource contentSource;
             float fillHeight;
             if (props != null)
@@ -238,7 +239,7 @@ namespace Vintagestory.GameContent
                 fillHeight = GameMath.Min(new float[]
                 {
                     1f,
-                    (float)stack.StackSize / props.ItemsPerLitre / (float)Math.Max(50, props.MaxStackSize)
+                    stack.StackSize / props.ItemsPerLitre / Math.Max(50, props.MaxStackSize)
                 }) * 10f / 16f;
             }
             else
@@ -252,11 +253,11 @@ namespace Vintagestory.GameContent
             Shape shape = Vintagestory.API.Common.Shape.TryGet(capi, shapefilepath);
             if (shape == null)
             {
-                this.api.Logger.Warning(string.Format("Barrel block '{0}': Content shape {1} not found. Will try to default to another one.", this.Code, shapefilepath));
+                api.Logger.Warning(string.Format("Barrel block '{0}': Content shape {1} not found. Will try to default to another one.", Code, shapefilepath));
                 return null;
             }
             MeshData contentMesh;
-            capi.Tesselator.TesselateShape("barrel", shape, out contentMesh, contentSource, new Vec3f(this.Shape.rotateX, this.Shape.rotateY, this.Shape.rotateZ), (props != null) ? props.GlowLevel : 0, 0, 0, null, null);
+            capi.Tesselator.TesselateShape("barrel", shape, out contentMesh, contentSource, new Vec3f(Shape.rotateX, Shape.rotateY, Shape.rotateZ), props != null ? props.GlowLevel : 0, 0, 0, null, null);
             contentMesh.Translate(0f, fillHeight, 0f);
             if (props != null && props.ClimateColorMap != null)
             {
@@ -288,7 +289,7 @@ namespace Vintagestory.GameContent
             else
             {
                 JsonObject itemAttributes = stack.ItemAttributes;
-                jsonObject = ((itemAttributes != null) ? itemAttributes["inContainerTexture"] : null);
+                jsonObject = itemAttributes != null ? itemAttributes["inContainerTexture"] : null;
             }
             JsonObject obj = jsonObject;
             if (obj != null && obj.Exists)
@@ -297,16 +298,16 @@ namespace Vintagestory.GameContent
                 fillHeight = GameMath.Min(new float[]
                 {
                     0.75f,
-                    0.7f * (float)stack.StackSize / (float)stack.Collectible.MaxStackSize
+                    0.7f * stack.StackSize / stack.Collectible.MaxStackSize
                 });
             }
-            else if (((stack != null) ? stack.Block : null) != null && (stack.Block.DrawType == EnumDrawType.Cube || stack.Block.Shape.Base.Path.Contains("basic/cube")) && capi.BlockTextureAtlas.GetPosition(stack.Block, "up", true) != null)
+            else if ((stack != null ? stack.Block : null) != null && (stack.Block.DrawType == EnumDrawType.Cube || stack.Block.Shape.Base.Path.Contains("basic/cube")) && capi.BlockTextureAtlas.GetPosition(stack.Block, "up", true) != null)
             {
                 contentSource = new BlockTopTextureSource(capi, stack.Block);
                 fillHeight = GameMath.Min(new float[]
                 {
                     0.75f,
-                    0.7f * (float)stack.StackSize / (float)stack.Collectible.MaxStackSize
+                    0.7f * stack.StackSize / stack.Collectible.MaxStackSize
                 });
             }
             else if (stack != null)
@@ -317,7 +318,7 @@ namespace Vintagestory.GameContent
                     {
                         return null;
                     }
-                    contentSource = new ContainerTextureSource(capi, stack, stack.Block.Textures.FirstOrDefault<KeyValuePair<string, CompositeTexture>>().Value);
+                    contentSource = new ContainerTextureSource(capi, stack, stack.Block.Textures.FirstOrDefault().Value);
                 }
                 else
                 {
@@ -330,7 +331,7 @@ namespace Vintagestory.GameContent
                 fillHeight = GameMath.Min(new float[]
                 {
                     0.75f,
-                    0.7f * (float)stack.StackSize / (float)stack.Collectible.MaxStackSize
+                    0.7f * stack.StackSize / stack.Collectible.MaxStackSize
                 });
             }
             return contentSource;
@@ -344,7 +345,7 @@ namespace Vintagestory.GameContent
             worldInteraction.ActionLangCode = "heldhelp-place";
             worldInteraction.HotKeyCode = "shift";
             worldInteraction.MouseButton = EnumMouseButton.Right;
-            worldInteraction.ShouldApply = (WorldInteraction wi, BlockSelection bs, EntitySelection es) => true;
+            worldInteraction.ShouldApply = (wi, bs, es) => true;
             array[num] = worldInteraction;
             return array;
         }
@@ -353,26 +354,26 @@ namespace Vintagestory.GameContent
         public override void OnLoaded(ICoreAPI api)
         {
             base.OnLoaded(api);
-            if (this.Attributes != null)
+            if (Attributes != null)
             {
-                this.capacityLitresFromAttributes = (float)this.Attributes["capacityLitres"].AsInt(50);
-                this.emptyShape = AssetLocation.Create(this.Attributes["emptyShape"].AsString(this.emptyShape), this.Code.Domain);
-                this.sealedShape = AssetLocation.Create(this.Attributes["sealedShape"].AsString(this.sealedShape), this.Code.Domain);
-                this.contentsShape = AssetLocation.Create(this.Attributes["contentsShape"].AsString(this.contentsShape), this.Code.Domain);
-                this.opaqueLiquidContentsShape = AssetLocation.Create(this.Attributes["opaqueLiquidContentsShape"].AsString(this.opaqueLiquidContentsShape), this.Code.Domain);
-                this.liquidContentsShape = AssetLocation.Create(this.Attributes["liquidContentsShape"].AsString(this.liquidContentsShape), this.Code.Domain);
+                capacityLitresFromAttributes = Attributes["capacityLitres"].AsInt(50);
+                emptyShape = AssetLocation.Create(Attributes["emptyShape"].AsString(emptyShape), Code.Domain);
+                sealedShape = AssetLocation.Create(Attributes["sealedShape"].AsString(sealedShape), Code.Domain);
+                contentsShape = AssetLocation.Create(Attributes["contentsShape"].AsString(contentsShape), Code.Domain);
+                opaqueLiquidContentsShape = AssetLocation.Create(Attributes["opaqueLiquidContentsShape"].AsString(opaqueLiquidContentsShape), Code.Domain);
+                liquidContentsShape = AssetLocation.Create(Attributes["liquidContentsShape"].AsString(liquidContentsShape), Code.Domain);
             }
-            this.emptyShape.WithPathPrefixOnce("shapes/").WithPathAppendixOnce(".json");
-            this.sealedShape.WithPathPrefixOnce("shapes/").WithPathAppendixOnce(".json");
-            this.contentsShape.WithPathPrefixOnce("shapes/").WithPathAppendixOnce(".json");
-            this.opaqueLiquidContentsShape.WithPathPrefixOnce("shapes/").WithPathAppendixOnce(".json");
-            this.liquidContentsShape.WithPathPrefixOnce("shapes/").WithPathAppendixOnce(".json");
+            emptyShape.WithPathPrefixOnce("shapes/").WithPathAppendixOnce(".json");
+            sealedShape.WithPathPrefixOnce("shapes/").WithPathAppendixOnce(".json");
+            contentsShape.WithPathPrefixOnce("shapes/").WithPathAppendixOnce(".json");
+            opaqueLiquidContentsShape.WithPathPrefixOnce("shapes/").WithPathAppendixOnce(".json");
+            liquidContentsShape.WithPathPrefixOnce("shapes/").WithPathAppendixOnce(".json");
             if (api.Side != EnumAppSide.Client)
             {
                 return;
             }
             ICoreClientAPI capi = api as ICoreClientAPI;
-            this.interactions = ObjectCacheUtil.GetOrCreate<WorldInteraction[]>(api, "liquidContainerBase", delegate
+            interactions = ObjectCacheUtil.GetOrCreate(api, "liquidContainerBase", delegate
             {
                 List<ItemStack> liquidContainerStacks = new List<ItemStack>();
                 foreach (CollectibleObject obj in api.World.Collectibles)
@@ -439,7 +440,7 @@ namespace Vintagestory.GameContent
                                     else
                                     {
                                         AssetLocation code = item.Code;
-                                        text = ((code != null) ? code.Path : null);
+                                        text = code != null ? code.Path : null;
                                     }
                                 }
                             }
@@ -503,10 +504,10 @@ namespace Vintagestory.GameContent
         public override void GetHeldItemInfo(ItemSlot inSlot, StringBuilder dsc, IWorldAccessor world, bool withDebugInfo)
         {
             base.GetHeldItemInfo(inSlot, dsc, world, withDebugInfo);
-            ItemStack[] contentStacks = this.GetContents(world, inSlot.Itemstack);
+            ItemStack[] contentStacks = GetContents(world, inSlot.Itemstack);
             if (contentStacks != null && contentStacks.Length != 0)
             {
-                ItemStack itemstack = ((contentStacks[0] == null) ? contentStacks[1] : contentStacks[0]);
+                ItemStack itemstack = contentStacks[0] == null ? contentStacks[1] : contentStacks[0];
                 if (itemstack != null)
                 {
                     dsc.Append(", " + Lang.Get("{0}x {1}", new object[]
@@ -528,7 +529,7 @@ namespace Vintagestory.GameContent
                 aftertext = text.Substring(i);
                 text = text.Substring(0, i);
             }
-            if (base.GetCurrentLitres(pos) <= 0f)
+            if (GetCurrentLitres(pos) <= 0f)
             {
                 text = "";
             }
@@ -551,7 +552,7 @@ namespace Vintagestory.GameContent
                         slot.Itemstack.StackSize,
                         slot.Itemstack.GetName()
                     });
-                    text += BlockLiquidContainerBase.PerishableInfoCompact(this.api, slot, 0f, false);
+                    text += PerishableInfoCompact(api, slot, 0f, false);
                 }
                 if (bebarrel.Sealed && bebarrel.CurrentRecipe != null)
                 {
@@ -560,8 +561,8 @@ namespace Vintagestory.GameContent
                     {
                         hoursPassed = Math.Max(0.0, hoursPassed + 0.2);
                     }
-                    string timePassedText = ((hoursPassed > 24.0) ? Lang.Get("{0} days", new object[] { Math.Floor(hoursPassed / (double)this.api.World.Calendar.HoursPerDay * 10.0) / 10.0 }) : Lang.Get("{0} hours", new object[] { Math.Floor(hoursPassed) }));
-                    string timeTotalText = ((bebarrel.CurrentRecipe.SealHours > 24.0) ? Lang.Get("{0} days", new object[] { Math.Round(bebarrel.CurrentRecipe.SealHours / (double)this.api.World.Calendar.HoursPerDay, 1) }) : Lang.Get("{0} hours", new object[] { Math.Round(bebarrel.CurrentRecipe.SealHours) }));
+                    string timePassedText = hoursPassed > 24.0 ? Lang.Get("{0} days", new object[] { Math.Floor(hoursPassed / (double)api.World.Calendar.HoursPerDay * 10.0) / 10.0 }) : Lang.Get("{0} hours", new object[] { Math.Floor(hoursPassed) });
+                    string timeTotalText = bebarrel.CurrentRecipe.SealHours > 24.0 ? Lang.Get("{0} days", new object[] { Math.Round(bebarrel.CurrentRecipe.SealHours / (double)api.World.Calendar.HoursPerDay, 1) }) : Lang.Get("{0} hours", new object[] { Math.Round(bebarrel.CurrentRecipe.SealHours) });
                     text = text + "\n" + Lang.Get("Sealed for {0} / {1}", new object[] { timePassedText, timeTotalText });
                 }
             }
