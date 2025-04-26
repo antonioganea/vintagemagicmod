@@ -15,6 +15,10 @@ namespace VintageMagicMod.WitchCauldron
 
         GuiDialogWitchCauldron invDialog;
 
+        // TODO : use this everywhere
+        public const int INPUT_SLOT = 0;
+        public const int LIQUID_SLOT = 1;
+
         // Slot 0: Input/Item slot
         // Slot 1: Liquid slot
         public override string InventoryClassName => "barrel";
@@ -42,7 +46,7 @@ namespace VintageMagicMod.WitchCauldron
         {
             inventory = new InventoryGeneric(2, null, null, (id, self) =>
             {
-                if (id == 0) return new ItemSlotBarrelInput(self);
+                if (id == INPUT_SLOT) return new ItemSlotBarrelInput(self);
                 else return new ItemSlotLiquidOnly(self, 50);
             });
             inventory.BaseWeight = 1;
@@ -63,12 +67,12 @@ namespace VintageMagicMod.WitchCauldron
 
         private float GetSuitability(ItemSlot sourceSlot, ItemSlot targetSlot, bool isMerge)
         {
-            // prevent for example rot overflowing into the liquid slot, on a shift-click, when slot[0] is already full of 64 x rot.   Rot can be accepted in the liquidOnly slot because it has containableProps (perhaps it shouldn't?)
-            if (targetSlot == inventory[1])
+            // prevent for example rot overflowing into the liquid slot, on a shift-click, when slot[INPUT_SLOT] is already full of 64 x rot.   Rot can be accepted in the liquidOnly slot because it has containableProps (perhaps it shouldn't?)
+            if (targetSlot == inventory[LIQUID_SLOT])
             {
-                if (inventory[0].StackSize > 0)
+                if (inventory[INPUT_SLOT].StackSize > 0)
                 {
-                    ItemStack currentStack = inventory[0].Itemstack;
+                    ItemStack currentStack = inventory[INPUT_SLOT].Itemstack;
                     ItemStack testStack = sourceSlot.Itemstack;
                     if (currentStack.Collectible.Equals(currentStack, testStack, GlobalConstants.IgnoredStackAttributes)) return -1;
                 }
@@ -81,7 +85,7 @@ namespace VintageMagicMod.WitchCauldron
 
         protected override ItemSlot GetAutoPushIntoSlot(BlockFacing atBlockFace, ItemSlot fromSlot)
         {
-            if (atBlockFace == BlockFacing.UP) return inventory[0];
+            if (atBlockFace == BlockFacing.UP) return inventory[INPUT_SLOT];
             return null;
         }
 
@@ -94,7 +98,7 @@ namespace VintageMagicMod.WitchCauldron
             if (ownBlock?.Attributes?["capacityLitres"].Exists == true)
             {
                 CapacityLitres = ownBlock.Attributes["capacityLitres"].AsInt(50);
-                (inventory[1] as ItemSlotLiquidOnly).CapacityLitres = CapacityLitres;
+                (inventory[LIQUID_SLOT] as ItemSlotLiquidOnly).CapacityLitres = CapacityLitres;
             }
 
             if (api.Side == EnumAppSide.Client && currentMesh == null)
@@ -116,7 +120,7 @@ namespace VintageMagicMod.WitchCauldron
         {
             if (ignoreChange) return;
 
-            if (slotId == 0 || slotId == 1)
+            if (slotId == INPUT_SLOT || slotId == LIQUID_SLOT)
             {
                 invDialog?.UpdateContents();
                 if (Api?.Side == EnumAppSide.Client)
@@ -133,7 +137,7 @@ namespace VintageMagicMod.WitchCauldron
 
         private void FindMatchingRecipe()
         {
-            ItemSlot[] inputSlots = new ItemSlot[] { inventory[0], inventory[1] };
+            ItemSlot[] inputSlots = new ItemSlot[] { inventory[INPUT_SLOT], inventory[LIQUID_SLOT] };
             CurrentRecipe = null;
 
             foreach (var recipe in Api.GetBarrelRecipes())
@@ -177,14 +181,14 @@ namespace VintageMagicMod.WitchCauldron
 
         private void OnEvery3Second(float dt)
         {
-            if (!inventory[0].Empty && CurrentRecipe == null)
+            if (!inventory[INPUT_SLOT].Empty && CurrentRecipe == null)
             {
                 FindMatchingRecipe();
             }
 
             if (CurrentRecipe != null)
             {
-                if (Sealed && CurrentRecipe.TryCraftNow(Api, Api.World.Calendar.TotalHours - SealedSinceTotalHours, new ItemSlot[] { inventory[0], inventory[1] }) == true)
+                if (Sealed && CurrentRecipe.TryCraftNow(Api, Api.World.Calendar.TotalHours - SealedSinceTotalHours, new ItemSlot[] { inventory[INPUT_SLOT], inventory[LIQUID_SLOT] }) == true)
                 {
                     MarkDirty(true);
                     Api.World.BlockAccessor.MarkBlockEntityDirty(Pos);
@@ -207,14 +211,14 @@ namespace VintageMagicMod.WitchCauldron
             base.OnBlockPlaced(byItemStack);
 
             // Deal with situation where the itemStack had some liquid contents, and BEContainer.OnBlockPlaced() placed this into the inputSlot not the liquidSlot
-            ItemSlot inputSlot = Inventory[0];
-            ItemSlot liquidSlot = Inventory[1];
+            ItemSlot inputSlot = inventory[INPUT_SLOT];
+            ItemSlot liquidSlot = inventory[LIQUID_SLOT];
             if (!inputSlot.Empty && liquidSlot.Empty)
             {
                 var liqProps = BlockLiquidContainerBase.GetContainableProps(inputSlot.Itemstack);
                 if (liqProps != null)
                 {
-                    Inventory.TryFlipItems(1, inputSlot);
+                    Inventory.TryFlipItems(LIQUID_SLOT, inputSlot);
                 }
             }
         }
@@ -360,7 +364,7 @@ namespace VintageMagicMod.WitchCauldron
         {
             if (ownBlock == null) return null;
 
-            MeshData mesh = ownBlock.GenMesh(inventory[0].Itemstack, inventory[1].Itemstack, Sealed, Pos);
+            MeshData mesh = ownBlock.GenMesh(inventory[INPUT_SLOT].Itemstack, inventory[LIQUID_SLOT].Itemstack, Sealed, Pos);
 
             if (mesh.CustomInts != null)
             {
