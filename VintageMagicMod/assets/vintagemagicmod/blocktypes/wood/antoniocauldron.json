@@ -12,7 +12,7 @@
 		"general": [ "*" ],
 		"decorative": [ "*" ]
 	},
-	"blockmaterial": "Wood",
+	"blockmaterial": "Metal",
 	"replaceable": 900,
 	"resistance": 1.5,
 	"maxStackSize": 1,
