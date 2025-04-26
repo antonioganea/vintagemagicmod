@@ -31,12 +31,12 @@ namespace VintageMagicMod.WitchCauldron
 
         public override int GetContainerSlotId(BlockPos pos)
         {
-            return 1;
+            return BlockEntityWitchCauldron.LIQUID_SLOT;
         }
 
         public override int GetContainerSlotId(ItemStack containerStack)
         {
-            return 1;
+            return BlockEntityWitchCauldron.LIQUID_SLOT;
         }
 
         public override void OnBeforeRender(ICoreClientAPI capi, ItemStack itemstack, EnumItemRenderTarget target, ref ItemRenderInfo renderinfo)
@@ -60,11 +60,11 @@ namespace VintageMagicMod.WitchCauldron
                 return;
             }
             bool issealed = itemstack.Attributes.GetBool("sealed", false);
-            string meshkey = GetBarrelMeshkey(contentStacks[0], contentStacks.Length > 1 ? contentStacks[1] : null);
+            string meshkey = GetBarrelMeshkey(contentStacks[BlockEntityWitchCauldron.INPUT_SLOT], contentStacks.Length > 1 ? contentStacks[BlockEntityWitchCauldron.LIQUID_SLOT] : null);
             MultiTextureMeshRef meshRef;
             if (!meshrefs.TryGetValue(meshkey, out meshRef))
             {
-                MeshData meshdata = GenMesh(contentStacks[0], contentStacks.Length > 1 ? contentStacks[1] : null, issealed, null);
+                MeshData meshdata = GenMesh(contentStacks[BlockEntityWitchCauldron.INPUT_SLOT], contentStacks.Length > 1 ? contentStacks[BlockEntityWitchCauldron.LIQUID_SLOT] : null, issealed, null);
                 meshRef = meshrefs[meshkey] = capi.Render.UploadMultiTextureMesh(meshdata);
             }
             renderinfo.ModelRef = meshRef;
@@ -425,7 +425,7 @@ namespace VintageMagicMod.WitchCauldron
                             }
                             else
                             {
-                                ItemStack itemstack = blockEntityBarrel2.Inventory[1].Itemstack;
+                                ItemStack itemstack = blockEntityBarrel2.Inventory[BlockEntityWitchCauldron.LIQUID_SLOT].Itemstack;
                                 if (itemstack == null)
                                 {
                                     text = null;
@@ -536,7 +536,7 @@ namespace VintageMagicMod.WitchCauldron
             BlockEntityWitchCauldron bebarrel = world.BlockAccessor.GetBlockEntity(pos) as BlockEntityWitchCauldron;
             if (bebarrel != null)
             {
-                ItemSlot slot = bebarrel.Inventory[0];
+                ItemSlot slot = bebarrel.Inventory[BlockEntityWitchCauldron.INPUT_SLOT];
                 if (!slot.Empty)
                 {
                     if (text.Length > 0)
