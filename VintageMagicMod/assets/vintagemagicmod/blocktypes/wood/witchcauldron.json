@@ -1,8 +1,8 @@
 {
 
-	"code": "antoniocauldron",
-	"class": "BlockAntonioCauldron",
-	"entityClass": "AntonioCauldron",
+	"code": "witchcauldron",
+	"class": "BlockWitchCauldron",
+	"entityClass": "WitchCauldron",
 	"behaviors": [
 		{ "name": "Lockable" },
 		{ "name": "UnstableFalling" }
@@ -12,7 +12,7 @@
 		"general": [ "*" ],
 		"decorative": [ "*" ]
 	},
-	"blockmaterial": "Wood",
+	"blockmaterial": "Metal",
 	"replaceable": 900,
 	"resistance": 1.5,
 	"maxStackSize": 1,

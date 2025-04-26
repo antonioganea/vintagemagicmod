@@ -4,7 +4,7 @@
   "vintagemagicmod:block-natesbigcauldron-bismuth": "Bishuth Cauldron",
   "vintagemagicmod:block-natesbigcauldron-copper": "Copper Cauldron",
   "vintagemagicmod:block-natesbigcauldron-lead": "Lead Cauldron",
-  "vintagemagicmod:block-antoniocauldron": "Magic Cauldron",
+  "vintagemagicmod:block-witchcauldron-*": "Magic Cauldron",
   "vintagemagicmod:item-spoon": "Spoon",
   "vintagemagicmod:block-witchoven-*": "Witch's Oven",
   "vintagemagicmod:item-healingessenceportion": "Essence of Healing",

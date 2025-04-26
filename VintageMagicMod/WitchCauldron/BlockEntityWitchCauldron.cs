@@ -4,11 +4,12 @@ using Vintagestory.API.Common;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
+using Vintagestory.GameContent;
 
-namespace Vintagestory.GameContent
+namespace VintageMagicMod.WitchCauldron
 {
     // Token: 0x02000356 RID: 854
-    public class BlockEntityAntonioCauldron : BlockEntityLiquidContainer
+    public class BlockEntityWitchCauldron : BlockEntityLiquidContainer
     {
         // Token: 0x17000350 RID: 848
         // (get) Token: 0x06001BFC RID: 7164 RVA: 0x00100D8B File Offset: 0x000FEF8B
@@ -31,15 +32,15 @@ namespace Vintagestory.GameContent
         {
             get
             {
-                this.FindMatchingRecipe();
-                return this.CurrentRecipe != null && this.CurrentRecipe.SealHours > 0.0;
+                FindMatchingRecipe();
+                return CurrentRecipe != null && CurrentRecipe.SealHours > 0.0;
             }
         }
 
         // Token: 0x06001C00 RID: 7168 RVA: 0x00100DCC File Offset: 0x000FEFCC
-        public BlockEntityAntonioCauldron()
+        public BlockEntityWitchCauldron()
         {
-            this.inventory = new InventoryGeneric(2, null, null, delegate (int id, InventoryGeneric self)
+            inventory = new InventoryGeneric(2, null, null, delegate (int id, InventoryGeneric self)
             {
                 if (id == 0)
                 {
@@ -47,16 +48,16 @@ namespace Vintagestory.GameContent
                 }
                 return new ItemSlotLiquidOnly(self, 50f);
             });
-            this.inventory.BaseWeight = 1f;
-            this.inventory.OnGetSuitability = new GetSuitabilityDelegate(this.GetSuitability);
-            this.inventory.SlotModified += this.Inventory_SlotModified;
-            this.inventory.OnAcquireTransitionSpeed += this.Inventory_OnAcquireTransitionSpeed1;
+            inventory.BaseWeight = 1f;
+            inventory.OnGetSuitability = new GetSuitabilityDelegate(GetSuitability);
+            inventory.SlotModified += Inventory_SlotModified;
+            inventory.OnAcquireTransitionSpeed += Inventory_OnAcquireTransitionSpeed1;
         }
 
         // Token: 0x06001C01 RID: 7169 RVA: 0x00100E69 File Offset: 0x000FF069
         private float Inventory_OnAcquireTransitionSpeed1(EnumTransitionType transType, ItemStack stack, float mul)
         {
-            if (this.Sealed && this.CurrentRecipe != null && this.CurrentRecipe.SealHours > 0.0)
+            if (Sealed && CurrentRecipe != null && CurrentRecipe.SealHours > 0.0)
             {
                 return 0f;
             }
@@ -66,9 +67,9 @@ namespace Vintagestory.GameContent
         // Token: 0x06001C02 RID: 7170 RVA: 0x00100E98 File Offset: 0x000FF098
         private float GetSuitability(ItemSlot sourceSlot, ItemSlot targetSlot, bool isMerge)
         {
-            if (targetSlot == this.inventory[1] && this.inventory[0].StackSize > 0)
+            if (targetSlot == inventory[1] && inventory[0].StackSize > 0)
             {
-                ItemStack currentStack = this.inventory[0].Itemstack;
+                ItemStack currentStack = inventory[0].Itemstack;
                 ItemStack testStack = sourceSlot.Itemstack;
                 if (currentStack.Collectible.Equals(currentStack, testStack, GlobalConstants.IgnoredStackAttributes))
                 {
@@ -78,7 +79,7 @@ namespace Vintagestory.GameContent
             // This line was modified from the original dnSPY code ~ antonio:
             //return (isMerge ? (this.inventory.BaseWeight + 3f) : (this.inventory.BaseWeight + 1f)) + (sourceSlot.Inventory is InventoryBasePlayer);
 
-            return (isMerge ? (this.inventory.BaseWeight + 3f) : (this.inventory.BaseWeight + 1f)) + ((sourceSlot.Inventory is InventoryBasePlayer) ? 1.0f : 0.0f);
+            return (isMerge ? inventory.BaseWeight + 3f : inventory.BaseWeight + 1f) + (sourceSlot.Inventory is InventoryBasePlayer ? 1.0f : 0.0f);
         }
 
         // Token: 0x06001C03 RID: 7171 RVA: 0x00100F32 File Offset: 0x000FF132
@@ -86,7 +87,7 @@ namespace Vintagestory.GameContent
         {
             if (atBlockFace == BlockFacing.UP)
             {
-                return this.inventory[0];
+                return inventory[0];
             }
             return null;
         }
@@ -95,8 +96,8 @@ namespace Vintagestory.GameContent
         public override void Initialize(ICoreAPI api)
         {
             base.Initialize(api);
-            this.ownBlock = base.Block as BlockAntonioCauldron;
-            BlockAntonioCauldron blockBarrel = this.ownBlock;
+            ownBlock = Block as BlockWitchCauldron;
+            BlockWitchCauldron blockBarrel = ownBlock;
             bool flag;
             if (blockBarrel == null)
             {
@@ -105,46 +106,46 @@ namespace Vintagestory.GameContent
             else
             {
                 JsonObject attributes = blockBarrel.Attributes;
-                flag = ((attributes != null) ? new bool?(attributes["capacityLitres"].Exists) : null).GetValueOrDefault();
+                flag = (attributes != null ? new bool?(attributes["capacityLitres"].Exists) : null).GetValueOrDefault();
             }
             if (flag)
             {
-                this.CapacityLitres = this.ownBlock.Attributes["capacityLitres"].AsInt(50);
-                (this.inventory[1] as ItemSlotLiquidOnly).CapacityLitres = (float)this.CapacityLitres;
+                CapacityLitres = ownBlock.Attributes["capacityLitres"].AsInt(50);
+                (inventory[1] as ItemSlotLiquidOnly).CapacityLitres = CapacityLitres;
             }
-            if (api.Side == EnumAppSide.Client && this.currentMesh == null)
+            if (api.Side == EnumAppSide.Client && currentMesh == null)
             {
-                this.currentMesh = this.GenMesh();
-                this.MarkDirty(true, null);
+                currentMesh = GenMesh();
+                MarkDirty(true, null);
             }
             if (api.Side == EnumAppSide.Server)
             {
-                this.RegisterGameTickListener(new Action<float>(this.OnEvery3Second), 3000, 0);
+                RegisterGameTickListener(new Action<float>(OnEvery3Second), 3000, 0);
             }
-            this.FindMatchingRecipe();
+            FindMatchingRecipe();
         }
 
         // Token: 0x06001C05 RID: 7173 RVA: 0x0010103C File Offset: 0x000FF23C
         private void Inventory_SlotModified(int slotId)
         {
-            if (this.ignoreChange)
+            if (ignoreChange)
             {
                 return;
             }
             if (slotId == 0 || slotId == 1)
             {
-                GuiDialogAntonioCauldron guiDialogBarrel = this.invDialog;
+                GuiDialogWitchCauldron guiDialogBarrel = invDialog;
                 if (guiDialogBarrel != null)
                 {
                     guiDialogBarrel.UpdateContents();
                 }
-                ICoreAPI api = this.Api;
+                ICoreAPI api = Api;
                 if (api != null && api.Side == EnumAppSide.Client)
                 {
-                    this.currentMesh = this.GenMesh();
+                    currentMesh = GenMesh();
                 }
-                this.MarkDirty(true, null);
-                this.FindMatchingRecipe();
+                MarkDirty(true, null);
+                FindMatchingRecipe();
             }
         }
 
@@ -153,43 +154,43 @@ namespace Vintagestory.GameContent
         {
             ItemSlot[] inputSlots = new ItemSlot[]
             {
-                this.inventory[0],
-                this.inventory[1]
+                inventory[0],
+                inventory[1]
             };
-            this.CurrentRecipe = null;
-            foreach (BarrelRecipe recipe in this.Api.GetBarrelRecipes())
+            CurrentRecipe = null;
+            foreach (BarrelRecipe recipe in Api.GetBarrelRecipes())
             {
                 int outsize;
                 if (recipe.Matches(inputSlots, out outsize))
                 {
-                    this.ignoreChange = true;
+                    ignoreChange = true;
                     if (recipe.SealHours > 0.0)
                     {
-                        this.CurrentRecipe = recipe;
-                        this.CurrentOutSize = outsize;
+                        CurrentRecipe = recipe;
+                        CurrentOutSize = outsize;
                     }
                     else
                     {
-                        ICoreAPI api = this.Api;
+                        ICoreAPI api = Api;
                         if (api != null && api.Side == EnumAppSide.Server)
                         {
-                            recipe.TryCraftNow(this.Api, 0.0, inputSlots);
-                            this.MarkDirty(true, null);
-                            this.Api.World.BlockAccessor.MarkBlockEntityDirty(this.Pos);
+                            recipe.TryCraftNow(Api, 0.0, inputSlots);
+                            MarkDirty(true, null);
+                            Api.World.BlockAccessor.MarkBlockEntityDirty(Pos);
                         }
                     }
-                    GuiDialogAntonioCauldron guiDialogBarrel = this.invDialog;
+                    GuiDialogWitchCauldron guiDialogBarrel = invDialog;
                     if (guiDialogBarrel != null)
                     {
                         guiDialogBarrel.UpdateContents();
                     }
-                    ICoreAPI api2 = this.Api;
+                    ICoreAPI api2 = Api;
                     if (api2 != null && api2.Side == EnumAppSide.Client)
                     {
-                        this.currentMesh = this.GenMesh();
-                        this.MarkDirty(true, null);
+                        currentMesh = GenMesh();
+                        MarkDirty(true, null);
                     }
-                    this.ignoreChange = false;
+                    ignoreChange = false;
                     break;
                 }
             }
@@ -198,28 +199,28 @@ namespace Vintagestory.GameContent
         // Token: 0x06001C07 RID: 7175 RVA: 0x001011EC File Offset: 0x000FF3EC
         private void OnEvery3Second(float dt)
         {
-            if (!this.inventory[0].Empty && this.CurrentRecipe == null)
+            if (!inventory[0].Empty && CurrentRecipe == null)
             {
-                this.FindMatchingRecipe();
+                FindMatchingRecipe();
             }
-            if (this.CurrentRecipe != null)
+            if (CurrentRecipe != null)
             {
-                if (this.Sealed && this.CurrentRecipe.TryCraftNow(this.Api, this.Api.World.Calendar.TotalHours - this.SealedSinceTotalHours, new ItemSlot[]
+                if (Sealed && CurrentRecipe.TryCraftNow(Api, Api.World.Calendar.TotalHours - SealedSinceTotalHours, new ItemSlot[]
                 {
-                    this.inventory[0],
-                    this.inventory[1]
+                    inventory[0],
+                    inventory[1]
                 }))
                 {
-                    this.MarkDirty(true, null);
-                    this.Api.World.BlockAccessor.MarkBlockEntityDirty(this.Pos);
-                    this.Sealed = false;
+                    MarkDirty(true, null);
+                    Api.World.BlockAccessor.MarkBlockEntityDirty(Pos);
+                    Sealed = false;
                     return;
                 }
             }
-            else if (this.Sealed)
+            else if (Sealed)
             {
-                this.Sealed = false;
-                this.MarkDirty(true, null);
+                Sealed = false;
+                MarkDirty(true, null);
             }
         }
 
@@ -227,76 +228,76 @@ namespace Vintagestory.GameContent
         public override void OnBlockPlaced(ItemStack byItemStack = null)
         {
             base.OnBlockPlaced(byItemStack);
-            ItemSlot inputSlot = this.Inventory[0];
-            ItemSlot liquidSlot = this.Inventory[1];
+            ItemSlot inputSlot = Inventory[0];
+            ItemSlot liquidSlot = Inventory[1];
             if (!inputSlot.Empty && liquidSlot.Empty && BlockLiquidContainerBase.GetContainableProps(inputSlot.Itemstack) != null)
             {
-                this.Inventory.TryFlipItems(1, inputSlot);
+                Inventory.TryFlipItems(1, inputSlot);
             }
         }
 
         // Token: 0x06001C09 RID: 7177 RVA: 0x00101321 File Offset: 0x000FF521
         public override void OnBlockBroken(IPlayer byPlayer = null)
         {
-            if (!this.Sealed)
+            if (!Sealed)
             {
                 base.OnBlockBroken(byPlayer);
             }
-            GuiDialogAntonioCauldron guiDialogBarrel = this.invDialog;
+            GuiDialogWitchCauldron guiDialogBarrel = invDialog;
             if (guiDialogBarrel != null)
             {
                 guiDialogBarrel.TryClose();
             }
-            this.invDialog = null;
+            invDialog = null;
         }
 
         // Token: 0x06001C0A RID: 7178 RVA: 0x0010134B File Offset: 0x000FF54B
         public void SealBarrel()
         {
-            if (this.Sealed)
+            if (Sealed)
             {
                 return;
             }
-            this.Sealed = true;
-            this.SealedSinceTotalHours = this.Api.World.Calendar.TotalHours;
-            this.MarkDirty(true, null);
+            Sealed = true;
+            SealedSinceTotalHours = Api.World.Calendar.TotalHours;
+            MarkDirty(true, null);
         }
 
         // Token: 0x06001C0B RID: 7179 RVA: 0x00101380 File Offset: 0x000FF580
         public void OnPlayerRightClick(IPlayer byPlayer)
         {
-            if (this.Sealed)
+            if (Sealed)
             {
                 return;
             }
-            this.FindMatchingRecipe();
-            if (this.Api.Side == EnumAppSide.Client)
+            FindMatchingRecipe();
+            if (Api.Side == EnumAppSide.Client)
             {
-                this.toggleInventoryDialogClient(byPlayer);
+                toggleInventoryDialogClient(byPlayer);
             }
         }
 
         // Token: 0x06001C0C RID: 7180 RVA: 0x001013A8 File Offset: 0x000FF5A8
         protected void toggleInventoryDialogClient(IPlayer byPlayer)
         {
-            if (this.invDialog == null)
+            if (invDialog == null)
             {
-                ICoreClientAPI capi = this.Api as ICoreClientAPI;
-                this.invDialog = new GuiDialogAntonioCauldron(Lang.Get("Barrel", Array.Empty<object>()), this.Inventory, this.Pos, this.Api as ICoreClientAPI);
-                this.invDialog.OnClosed += delegate
+                ICoreClientAPI capi = Api as ICoreClientAPI;
+                invDialog = new GuiDialogWitchCauldron(Lang.Get("Barrel", Array.Empty<object>()), Inventory, Pos, Api as ICoreClientAPI);
+                invDialog.OnClosed += delegate
                 {
-                    this.invDialog = null;
-                    capi.Network.SendBlockEntityPacket(this.Pos, 1001, null);
-                    capi.Network.SendPacketClient(this.Inventory.Close(byPlayer));
+                    invDialog = null;
+                    capi.Network.SendBlockEntityPacket(Pos, 1001, null);
+                    capi.Network.SendPacketClient(Inventory.Close(byPlayer));
                 };
-                this.invDialog.OpenSound = AssetLocation.Create("sounds/block/barrelopen", "game");
-                this.invDialog.CloseSound = AssetLocation.Create("sounds/block/barrelclose", "game");
-                this.invDialog.TryOpen();
-                capi.Network.SendPacketClient(this.Inventory.Open(byPlayer));
-                capi.Network.SendBlockEntityPacket(this.Pos, 1000, null);
+                invDialog.OpenSound = AssetLocation.Create("sounds/block/barrelopen", "game");
+                invDialog.CloseSound = AssetLocation.Create("sounds/block/barrelclose", "game");
+                invDialog.TryOpen();
+                capi.Network.SendPacketClient(Inventory.Open(byPlayer));
+                capi.Network.SendBlockEntityPacket(Pos, 1000, null);
                 return;
             }
-            this.invDialog.TryClose();
+            invDialog.TryClose();
         }
 
         // Token: 0x06001C0D RID: 7181 RVA: 0x001014D0 File Offset: 0x000FF6D0
@@ -305,8 +306,8 @@ namespace Vintagestory.GameContent
             base.OnReceivedClientPacket(player, packetid, data);
             if (packetid < 1000)
             {
-                this.Inventory.InvNetworkUtil.HandleClientPacket(player, packetid, data);
-                this.Api.World.BlockAccessor.GetChunkAtBlockPos(this.Pos).MarkModified();
+                Inventory.InvNetworkUtil.HandleClientPacket(player, packetid, data);
+                Api.World.BlockAccessor.GetChunkAtBlockPos(Pos).MarkModified();
                 return;
             }
             if (packetid == 1001)
@@ -314,7 +315,7 @@ namespace Vintagestory.GameContent
                 IPlayerInventoryManager inventoryManager = player.InventoryManager;
                 if (inventoryManager != null)
                 {
-                    inventoryManager.CloseInventory(this.Inventory);
+                    inventoryManager.CloseInventory(Inventory);
                 }
             }
             if (packetid == 1000)
@@ -322,12 +323,12 @@ namespace Vintagestory.GameContent
                 IPlayerInventoryManager inventoryManager2 = player.InventoryManager;
                 if (inventoryManager2 != null)
                 {
-                    inventoryManager2.OpenInventory(this.Inventory);
+                    inventoryManager2.OpenInventory(Inventory);
                 }
             }
             if (packetid == 1337)
             {
-                this.SealBarrel();
+                SealBarrel();
             }
         }
 
@@ -337,18 +338,18 @@ namespace Vintagestory.GameContent
             base.OnReceivedServerPacket(packetid, data);
             if (packetid == 1001)
             {
-                (this.Api.World as IClientWorldAccessor).Player.InventoryManager.CloseInventory(this.Inventory);
-                GuiDialogAntonioCauldron guiDialogBarrel = this.invDialog;
+                (Api.World as IClientWorldAccessor).Player.InventoryManager.CloseInventory(Inventory);
+                GuiDialogWitchCauldron guiDialogBarrel = invDialog;
                 if (guiDialogBarrel != null)
                 {
                     guiDialogBarrel.TryClose();
                 }
-                GuiDialogAntonioCauldron guiDialogBarrel2 = this.invDialog;
+                GuiDialogWitchCauldron guiDialogBarrel2 = invDialog;
                 if (guiDialogBarrel2 != null)
                 {
                     guiDialogBarrel2.Dispose();
                 }
-                this.invDialog = null;
+                invDialog = null;
             }
         }
 
@@ -356,22 +357,22 @@ namespace Vintagestory.GameContent
         public override void FromTreeAttributes(ITreeAttribute tree, IWorldAccessor worldForResolving)
         {
             base.FromTreeAttributes(tree, worldForResolving);
-            this.Sealed = tree.GetBool("sealed", false);
-            ICoreAPI api = this.Api;
+            Sealed = tree.GetBool("sealed", false);
+            ICoreAPI api = Api;
             if (api != null && api.Side == EnumAppSide.Client)
             {
-                this.currentMesh = this.GenMesh();
-                this.MarkDirty(true, null);
-                GuiDialogAntonioCauldron guiDialogBarrel = this.invDialog;
+                currentMesh = GenMesh();
+                MarkDirty(true, null);
+                GuiDialogWitchCauldron guiDialogBarrel = invDialog;
                 if (guiDialogBarrel != null)
                 {
                     guiDialogBarrel.UpdateContents();
                 }
             }
-            this.SealedSinceTotalHours = tree.GetDouble("sealedSinceTotalHours", 0.0);
-            if (this.Api != null)
+            SealedSinceTotalHours = tree.GetDouble("sealedSinceTotalHours", 0.0);
+            if (Api != null)
             {
-                this.FindMatchingRecipe();
+                FindMatchingRecipe();
             }
         }
 
@@ -379,18 +380,18 @@ namespace Vintagestory.GameContent
         public override void ToTreeAttributes(ITreeAttribute tree)
         {
             base.ToTreeAttributes(tree);
-            tree.SetBool("sealed", this.Sealed);
-            tree.SetDouble("sealedSinceTotalHours", this.SealedSinceTotalHours);
+            tree.SetBool("sealed", Sealed);
+            tree.SetDouble("sealedSinceTotalHours", SealedSinceTotalHours);
         }
 
         // Token: 0x06001C11 RID: 7185 RVA: 0x00101698 File Offset: 0x000FF898
         internal MeshData GenMesh()
         {
-            if (this.ownBlock == null)
+            if (ownBlock == null)
             {
                 return null;
             }
-            MeshData mesh = this.ownBlock.GenMesh(this.inventory[0].Itemstack, this.inventory[1].Itemstack, this.Sealed, this.Pos);
+            MeshData mesh = ownBlock.GenMesh(inventory[0].Itemstack, inventory[1].Itemstack, Sealed, Pos);
             if (mesh.CustomInts != null)
             {
                 for (int i = 0; i < mesh.CustomInts.Count; i++)
@@ -406,7 +407,7 @@ namespace Vintagestory.GameContent
         public override void OnBlockUnloaded()
         {
             base.OnBlockUnloaded();
-            GuiDialogAntonioCauldron guiDialogBarrel = this.invDialog;
+            GuiDialogWitchCauldron guiDialogBarrel = invDialog;
             if (guiDialogBarrel == null)
             {
                 return;
@@ -417,18 +418,18 @@ namespace Vintagestory.GameContent
         // Token: 0x06001C13 RID: 7187 RVA: 0x00101754 File Offset: 0x000FF954
         public override bool OnTesselation(ITerrainMeshPool mesher, ITesselatorAPI tesselator)
         {
-            mesher.AddMeshData(this.currentMesh, 1);
+            mesher.AddMeshData(currentMesh, 1);
             return true;
         }
 
         // Token: 0x04000EDB RID: 3803
-        private GuiDialogAntonioCauldron invDialog;
+        private GuiDialogWitchCauldron invDialog;
 
         // Token: 0x04000EDC RID: 3804
         private MeshData currentMesh;
 
         // Token: 0x04000EDD RID: 3805
-        private BlockAntonioCauldron ownBlock;
+        private BlockWitchCauldron ownBlock;
 
         // Token: 0x04000EDE RID: 3806
         public bool Sealed;
