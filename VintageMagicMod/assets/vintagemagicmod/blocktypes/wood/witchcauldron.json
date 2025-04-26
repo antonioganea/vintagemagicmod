@@ -1,6 +1,6 @@
 {
 
-	"code": "antoniocauldron",
+	"code": "witchcauldron",
 	"class": "BlockAntonioCauldron",
 	"entityClass": "AntonioCauldron",
 	"behaviors": [
