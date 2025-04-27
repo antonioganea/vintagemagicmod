@@ -41,7 +41,7 @@ public class GuiDialogWitchCauldron : GuiDialogBlockEntity
         ElementBounds dialogBounds = ElementStdBounds.AutosizedMainDialog.WithFixedAlignmentOffset(IsRight(screenPos) ? 0.0 - GuiStyle.DialogToScreenPadding : GuiStyle.DialogToScreenPadding, 0.0).WithAlignment(IsRight(screenPos) ? EnumDialogArea.RightMiddle : EnumDialogArea.LeftMiddle);
         SingleComposer = capi.Gui.CreateCompo("blockentityantoniocauldron" + BlockEntityPosition, dialogBounds).AddShadedDialogBG(bgBounds).AddDialogTitleBar(DialogTitle, OnTitleBarClose)
             .BeginChildElements(bgBounds)
-            .AddItemSlotGrid(Inventory, SendInvPacket, 1, new int[1], inputSlotBounds, "inputSlot")
+            .AddItemSlotGrid(Inventory, SendInvPacket, 1, new int[1] { BlockEntityWitchCauldron.INPUT_SLOT }, inputSlotBounds, "inputSlot")
             .AddSmallButton(Lang.Get("barrel-seal"), onSealClick, ElementBounds.Fixed(0.0, 100.0, 80.0, 25.0))
             .AddInset(fullnessMeterBounds.ForkBoundingParent(2.0, 2.0, 2.0, 2.0), 2)
             .AddDynamicCustomDraw(fullnessMeterBounds, fullnessMeterDraw, "liquidBar")
@@ -53,15 +53,15 @@ public class GuiDialogWitchCauldron : GuiDialogBlockEntity
     private string getContentsText()
     {
         string contents = Lang.Get("Contents:");
-        if (Inventory[0].Empty && Inventory[1].Empty)
+        if (Inventory[BlockEntityWitchCauldron.INPUT_SLOT].Empty && Inventory[BlockEntityWitchCauldron.LIQUID_SLOT].Empty)
         {
             contents = contents + "\n" + Lang.Get("nobarrelcontents");
         }
         else
         {
-            if (!Inventory[1].Empty)
+            if (!Inventory[BlockEntityWitchCauldron.LIQUID_SLOT].Empty)
             {
-                ItemStack stack2 = Inventory[1].Itemstack;
+                ItemStack stack2 = Inventory[BlockEntityWitchCauldron.LIQUID_SLOT].Itemstack;
                 WaterTightContainableProps props2 = BlockLiquidContainerBase.GetContainableProps(stack2);
                 if (props2 != null)
                 {
@@ -73,9 +73,9 @@ public class GuiDialogWitchCauldron : GuiDialogBlockEntity
                     contents = contents + "\n" + Lang.Get("barrelcontents-items", stack2.StackSize, stack2.GetName());
                 }
             }
-            if (!Inventory[0].Empty)
+            if (!Inventory[BlockEntityWitchCauldron.INPUT_SLOT].Empty)
             {
-                ItemStack stack = Inventory[0].Itemstack;
+                ItemStack stack = Inventory[BlockEntityWitchCauldron.INPUT_SLOT].Itemstack;
                 contents = contents + "\n" + Lang.Get("barrelcontents-items", stack.StackSize, stack.GetName());
             }
             BlockEntityWitchCauldron bebarrel = capi.World.BlockAccessor.GetBlockEntity(BlockEntityPosition) as BlockEntityWitchCauldron;
@@ -107,7 +107,7 @@ public class GuiDialogWitchCauldron : GuiDialogBlockEntity
 
     private void fullnessMeterDraw(Context ctx, ImageSurface surface, ElementBounds currentBounds)
     {
-        ItemSlot liquidSlot = Inventory[1];
+        ItemSlot liquidSlot = Inventory[BlockEntityWitchCauldron.LIQUID_SLOT];
         if (!liquidSlot.Empty)
         {
             BlockEntityWitchCauldron obj = capi.World.BlockAccessor.GetBlockEntity(BlockEntityPosition) as BlockEntityWitchCauldron;
