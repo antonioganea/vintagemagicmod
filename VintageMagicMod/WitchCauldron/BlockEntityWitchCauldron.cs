@@ -15,12 +15,11 @@ namespace VintageMagicMod.WitchCauldron
 
         GuiDialogWitchCauldron invDialog;
 
-        // TODO : use this everywhere
-        public const int INPUT_SLOT = 0;
-        public const int LIQUID_SLOT = 1;
+        public const int LIQUID_SLOT = 0;
+        public const int INPUT_SLOT = 1;
 
-        // Slot 0: Input/Item slot
-        // Slot 1: Liquid slot
+        // Slot 0: Liquid slot
+        // Slot 1: Input/Item slot
         public override string InventoryClassName => "barrel";
 
         MeshData currentMesh;
@@ -46,7 +45,7 @@ namespace VintageMagicMod.WitchCauldron
         {
             inventory = new InventoryGeneric(2, null, null, (id, self) =>
             {
-                if (id == INPUT_SLOT) return new ItemSlotBarrelInput(self);
+                if (id == INPUT_SLOT) return new ItemSlotWitchCauldronInput(self);
                 else return new ItemSlotLiquidOnly(self, 50);
             });
             inventory.BaseWeight = 1;
