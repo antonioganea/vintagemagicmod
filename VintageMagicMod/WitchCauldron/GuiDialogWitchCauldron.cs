@@ -13,6 +13,7 @@ public class GuiDialogWitchCauldron : GuiDialogBlockEntity
     private EnumPosFlag screenPos;
 
     private ElementBounds inputSlotBounds;
+    private ElementBounds auxiliarySlotBounds;
 
     protected override double FloatyDialogPosition => 0.6;
 
@@ -30,6 +31,12 @@ public class GuiDialogWitchCauldron : GuiDialogBlockEntity
     {
         ElementBounds barrelBoundsLeft = ElementBounds.Fixed(0.0, 30.0, 150.0, 200.0);
         ElementBounds barrelBoundsRight = ElementBounds.Fixed(170.0, 30.0, 150.0, 200.0);
+
+        auxiliarySlotBounds = ElementStdBounds.SlotGrid(EnumDialogArea.None, 165.0, 140.0, 3, 2);
+        auxiliarySlotBounds.fixedHeight += 10.0;
+        _ = auxiliarySlotBounds.fixedHeight;
+        _ = auxiliarySlotBounds.fixedY;
+
         inputSlotBounds = ElementStdBounds.SlotGrid(EnumDialogArea.None, 0.0, 30.0, 1, 1);
         inputSlotBounds.fixedHeight += 10.0;
         _ = inputSlotBounds.fixedHeight;
@@ -42,6 +49,7 @@ public class GuiDialogWitchCauldron : GuiDialogBlockEntity
         SingleComposer = capi.Gui.CreateCompo("blockentityantoniocauldron" + BlockEntityPosition, dialogBounds).AddShadedDialogBG(bgBounds).AddDialogTitleBar(DialogTitle, OnTitleBarClose)
             .BeginChildElements(bgBounds)
             .AddItemSlotGrid(Inventory, SendInvPacket, 1, new int[1] { BlockEntityWitchCauldron.INPUT_SLOT }, inputSlotBounds, "inputSlot")
+            .AddItemSlotGrid(Inventory, SendInvPacket, 3, BlockEntityWitchCauldron.GetSelectiveSlots(), auxiliarySlotBounds, "auxiliarySlots")
             .AddSmallButton(Lang.Get("barrel-seal"), onSealClick, ElementBounds.Fixed(0.0, 100.0, 80.0, 25.0))
             .AddInset(fullnessMeterBounds.ForkBoundingParent(2.0, 2.0, 2.0, 2.0), 2)
             .AddDynamicCustomDraw(fullnessMeterBounds, fullnessMeterDraw, "liquidBar")
@@ -174,6 +182,7 @@ public class GuiDialogWitchCauldron : GuiDialogBlockEntity
     public override void OnGuiClosed()
     {
         SingleComposer.GetSlotGrid("inputSlot").OnGuiClosed(capi);
+        SingleComposer.GetSlotGrid("auxiliarySlots").OnGuiClosed(capi);
         base.OnGuiClosed();
         FreePos("smallblockgui", screenPos);
     }

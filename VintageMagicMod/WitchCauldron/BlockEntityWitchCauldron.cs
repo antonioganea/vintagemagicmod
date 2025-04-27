@@ -18,8 +18,12 @@ namespace VintageMagicMod.WitchCauldron
         public const int LIQUID_SLOT = 0;
         public const int INPUT_SLOT = 1;
 
+        public const int AUXILIARY_ITEM_SLOT_COUNT = 6;
+        public const int TOTAL_SLOT_COUNT = AUXILIARY_ITEM_SLOT_COUNT + 2;
+
         // Slot 0: Liquid slot
         // Slot 1: Input/Item slot
+        // Slot 2,3,4,5,6,7 - auxiliary
         public override string InventoryClassName => "barrel";
 
         MeshData currentMesh;
@@ -43,10 +47,11 @@ namespace VintageMagicMod.WitchCauldron
 
         public BlockEntityWitchCauldron()
         {
-            inventory = new InventoryGeneric(2, null, null, (id, self) =>
+            inventory = new InventoryGeneric(TOTAL_SLOT_COUNT, null, null, (id, self) =>
             {
-                if (id == INPUT_SLOT) return new ItemSlotWitchCauldronInput(self);
-                else return new ItemSlotLiquidOnly(self, 50);
+                if (id == LIQUID_SLOT) return new ItemSlotLiquidOnly(self, 50);
+                else if (id == INPUT_SLOT) return new ItemSlotWitchCauldronInput(self);
+                else return new ItemSlotWatertight(self, 6);
             });
             inventory.BaseWeight = 1;
             inventory.OnGetSuitability = GetSuitability;
@@ -54,6 +59,37 @@ namespace VintageMagicMod.WitchCauldron
 
             inventory.SlotModified += Inventory_SlotModified;
             inventory.OnAcquireTransitionSpeed += Inventory_OnAcquireTransitionSpeed1;
+        }
+
+        private static int[] _selectiveSlots;
+
+        public static int[] GetSelectiveSlots()
+        {
+            if (_selectiveSlots != null)
+            {
+                return _selectiveSlots;
+            }
+            else
+            {
+                _selectiveSlots = new int[AUXILIARY_ITEM_SLOT_COUNT];
+
+                int currentSlotId = 0;
+
+                for (int i = 0; i < AUXILIARY_ITEM_SLOT_COUNT; i++)
+                {
+                    // Skip over LIQUID_SLOT / INPUT_SLOT, which are not auxiliary
+                    while (currentSlotId == LIQUID_SLOT || currentSlotId == INPUT_SLOT)
+                    {
+                        currentSlotId++;
+                    }
+
+                    _selectiveSlots[i] = currentSlotId;
+
+                    currentSlotId++;
+                }
+            }
+
+            return _selectiveSlots;
         }
 
         private float Inventory_OnAcquireTransitionSpeed1(EnumTransitionType transType, ItemStack stack, float mul)
@@ -119,7 +155,7 @@ namespace VintageMagicMod.WitchCauldron
         {
             if (ignoreChange) return;
 
-            if (slotId == INPUT_SLOT || slotId == LIQUID_SLOT)
+            if (slotId >= 0 && slotId < TOTAL_SLOT_COUNT)
             {
                 invDialog?.UpdateContents();
                 if (Api?.Side == EnumAppSide.Client)
@@ -264,7 +300,7 @@ namespace VintageMagicMod.WitchCauldron
             if (invDialog == null)
             {
                 ICoreClientAPI capi = Api as ICoreClientAPI;
-                invDialog = new GuiDialogWitchCauldron(Lang.Get("Barrel"), Inventory, Pos, Api as ICoreClientAPI);
+                invDialog = new GuiDialogWitchCauldron(Lang.Get("Cauldron"), Inventory, Pos, Api as ICoreClientAPI);
                 invDialog.OnClosed += () =>
                 {
                     invDialog = null;
