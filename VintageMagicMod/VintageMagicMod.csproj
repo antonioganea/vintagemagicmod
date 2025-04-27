@@ -54,12 +54,20 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>
   <None Remove="assets\vintagemagicmod\itemtypes\tool\bone_needle.json" />
+  <None Remove="assets\vintagemagicmod\itemtypes\tool\voodoo_poppet.json" />
   <None Remove="assets\vintagemagicmod\itemtypes\tool\wooden_wand.json" />
   <None Remove="assets\vintagemagicmod\recipes\grid\bone_needle.json" />
   <None Remove="assets\vintagemagicmod\recipes\grid\wooden_wand.json" />
+  <None Remove="assets\vintagemagicmod\shapes\item\tool\voodoo_poppet.json" />
   <None Remove="assets\vintagemagicmod\shapes\item\tool\wooden_wand.json" />
   <Content Include="modinfo.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
+</ItemGroup>
+
+<ItemGroup>
+  <Content Update="assets\vintagemagicmod\itemtypes\tool\voodoo_poppet.json">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>
 </ItemGroup>
 

@@ -7,7 +7,7 @@
         "base": "item/tool/bone_needle"
     },
     "class": "vintagemagicmod.bone_needle",
-    "durability": 500,
+    "durability": 100,
     "guiTransform": {
         "translation": {
             "x": 0,

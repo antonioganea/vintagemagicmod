@@ -18,6 +18,7 @@ namespace VintageMagicMod
 
             api.RegisterItemClass(Domain + ".wooden_wand", typeof(ItemMagicWoodenWand));
             api.RegisterItemClass(Domain + ".bone_needle", typeof(ItemBoneNeedle));
+            api.RegisterItemClass(Domain + ".voodoo_poppet", typeof(ItemVoodooPoppet));
 
             api.RegisterBlockClass("BlockAntonioCauldron", typeof(BlockAntonioCauldron));
             api.RegisterBlockEntityClass("AntonioCauldron", typeof(BlockEntityAntonioCauldron));
