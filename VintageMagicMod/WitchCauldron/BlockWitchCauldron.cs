@@ -5,6 +5,7 @@ using System.Text;
 using VintageMagicMod;
 using Vintagestory.API.Client;
 using Vintagestory.API.Common;
+using Vintagestory.API.Common.Entities;
 using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
@@ -90,6 +91,34 @@ namespace VintageMagicMod.WitchCauldron
                     val.Value.Dispose();
                 }
                 capi.ObjectCache.Remove("barrelMeshRefs");
+            }
+        }
+
+        //On contact with entity, if the entity is on the top and the entity is an item entity, pull the entity into the hopper's inventory.
+        public override void OnEntityCollide(IWorldAccessor world, Entity entity, BlockPos pos, BlockFacing facing, Vec3d collideSpeed, bool isImpact)
+        {
+            base.OnEntityCollide(world, entity, pos, facing, collideSpeed, isImpact);
+
+            if (facing == BlockFacing.UP && entity is EntityItem inWorldItem && world.Side == EnumAppSide.Server)
+            {
+                // Don't suck up everything instantly
+                if (world.Rand.NextDouble() < 0.9) return;
+
+                BlockEntity blockEntity = world.BlockAccessor.GetBlockEntity(pos);
+                if (inWorldItem.Alive && blockEntity is BlockEntityWitchCauldron beWitchCauldron)
+                {
+                    WeightedSlot ws = beWitchCauldron.Inventory.GetBestSuitedSlot(inWorldItem.Slot);
+
+                    if (ws.slot != null) //we have determined there is room for this itemStack in this inventory.
+                    {
+                        inWorldItem.Slot.TryPutInto(api.World, ws.slot, 1);
+                        if (inWorldItem.Slot.StackSize <= 0)
+                        {
+                            inWorldItem.Itemstack = null;
+                            inWorldItem.Alive = false;
+                        }
+                    }
+                }
             }
         }
 
