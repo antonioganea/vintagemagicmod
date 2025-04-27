@@ -25,7 +25,7 @@ namespace VintageMagicMod.WitchCauldron
 
             if (itemstack == null) return;
 
-            ItemSlotLiquidOnly liquidSlot = inventory[1] as ItemSlotLiquidOnly;
+            ItemSlotLiquidOnly liquidSlot = inventory[BlockEntityWitchCauldron.LIQUID_SLOT] as ItemSlotLiquidOnly;
 
             bool stackable = !liquidSlot.Empty && liquidSlot.Itemstack.Equals(inventory.Api.World, itemstack, GlobalConstants.IgnoredStackAttributes);
             if (stackable)
@@ -80,7 +80,7 @@ namespace VintageMagicMod.WitchCauldron
 
         protected override void ActivateSlotRightClick(ItemSlot sourceSlot, ref ItemStackMoveOperation op)
         {
-            ItemSlotLiquidOnly liquidSlot = inventory[1] as ItemSlotLiquidOnly;
+            ItemSlotLiquidOnly liquidSlot = inventory[BlockEntityWitchCauldron.LIQUID_SLOT] as ItemSlotLiquidOnly;
             IWorldAccessor world = inventory.Api.World;
 
             if (sourceSlot?.Itemstack?.Collectible is ILiquidSink sink && !liquidSlot.Empty && sink.AllowHeldLiquidTransfer)
@@ -134,7 +134,7 @@ namespace VintageMagicMod.WitchCauldron
 
             if (sourceSlot.Itemstack.Collectible is ILiquidSource source && source.AllowHeldLiquidTransfer)
             {
-                ItemSlotLiquidOnly liquidSlot = inventory[1] as ItemSlotLiquidOnly;
+                ItemSlotLiquidOnly liquidSlot = inventory[BlockEntityWitchCauldron.LIQUID_SLOT] as ItemSlotLiquidOnly;
 
                 ItemStack bucketContents = source.GetContent(sourceSlot.Itemstack);
                 bool stackable = !liquidSlot.Empty && liquidSlot.Itemstack.Equals(world, bucketContents, GlobalConstants.IgnoredStackAttributes);
@@ -181,7 +181,7 @@ namespace VintageMagicMod.WitchCauldron
             string contentItemCode = sourceSlot.Itemstack?.ItemAttributes?["contentItemCode"].AsString();
             if (contentItemCode != null)
             {
-                ItemSlot liquidSlot = inventory[1];
+                ItemSlot liquidSlot = inventory[BlockEntityWitchCauldron.LIQUID_SLOT];
 
                 ItemStack contentStack = new ItemStack(world.GetItem(new AssetLocation(contentItemCode)));
                 bool stackable = !liquidSlot.Empty && liquidSlot.Itemstack.Equals(world, contentStack, GlobalConstants.IgnoredStackAttributes);
