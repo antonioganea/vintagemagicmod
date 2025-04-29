@@ -1,38 +1,60 @@
-﻿using Vintagestory.API.Common.Entities;
-using Vintagestory.API.Common;
+﻿using Vintagestory.API.Common;
+using Vintagestory.API.Common.Entities;
+using Vintagestory.API.Config;
 using Vintagestory.API.MathTools;
 
-public class ItemVoodooPoppet : Item
+public class ItemVoodooPoppet : Item, IEntityStorer
 {
-    public Entity storedEntity;
+    private double waterStartTime = -1;
+    private const float WATER_DROWN_DELAY = 3f; // seconds
+    private const int POPPET_DURABILITY_DAMAGE = 50;
+    private const float DROWN_DAMAGE = 5f;
 
 
-    // You can add more functionalities to the VoodooPoppet based on the stored entity here
+    public Entity GetStoredEntity(IWorldAccessor world, ItemStack itemStack) => EntityStorerUtil.GetStoredEntity(world, itemStack);
+    public void SetStoredEntity(ItemStack itemStack, Entity entity) => EntityStorerUtil.SetStoredEntity(itemStack, entity);
+
     public override void OnHeldInteractStart(ItemSlot slot, EntityAgent byEntity, BlockSelection blockSel, EntitySelection entitySel, bool firstEvent, ref EnumHandHandling handling)
     {
-        base.OnHeldInteractStart(slot, byEntity, blockSel, entitySel, firstEvent, ref handling);
-
         IWorldAccessor world = byEntity.World;
+        Entity target = GetStoredEntity(world, slot.Itemstack);
 
-        // Example: Show debug info about captured entity
-        if (storedEntity != null)
+        if (target != null)
         {
-            world.Logger.Debug($"VoodooPoppet contains essence of: {storedEntity.Code}");
-
-            if (byEntity is IPlayer player)
-            {
-                world.Logger.Debug($"Poppet contains essence of: {storedEntity.Code}");
-
-            }
-
-            handling = EnumHandHandling.PreventDefault;
+            world.Logger.Debug($"Poppet bound to: {target.Code}");
         }
         else
         {
-            if (byEntity is IPlayer player)
+            world.Logger.Debug("Poppet has no stored entity.");
+        }
+
+        base.OnHeldInteractStart(slot, byEntity, blockSel, entitySel, firstEvent, ref handling);
+    }
+
+    public override string GetHeldItemName(ItemStack itemStack)
+    {
+        string targetName = itemStack.Attributes.GetString("storedEntityName", "Unknown");
+        return Lang.Get("Voodoo Poppet (Target: {0})", targetName);
+    }
+
+    public override void OnGroundIdle(EntityItem entityItem)
+    {
+        base.OnGroundIdle(entityItem);
+
+        IWorldAccessor world = entityItem.World;
+        if (world.Side != EnumAppSide.Server) return;
+
+        if (entityItem.Swimming && world.Rand.NextDouble() < 0.01)
+        {
+            DamageSource damage = new DamageSource
             {
-                world.Logger.Debug("This poppet has not captured any entity yet.");
-            }
+                Type = EnumDamageType.Suffocation,
+                KnockbackStrength = 0
+            };
+
+            //EntityStorerUtil.DamageItemSlot(slot, byEntity, POPPET_DURABILITY_DAMAGE);
+            Entity storedEntity = GetStoredEntity(world, entityItem.Itemstack);
+            storedEntity.ReceiveDamage(damage, DROWN_DAMAGE);
         }
     }
 }
