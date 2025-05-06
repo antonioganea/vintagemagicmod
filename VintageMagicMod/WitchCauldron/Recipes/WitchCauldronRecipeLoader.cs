@@ -6,12 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using VintageMagicMod.Utils;
 using Vintagestory.API.Common;
-using Vintagestory.API.Config;
 using Vintagestory.API.Server;
-using Vintagestory.GameContent;
 
-
-namespace VintageMagicMod.WitchOven.Recipes
+namespace VintageMagicMod.WitchCauldron.Recipes
 {
     public static partial class ApiAdditions
     {
@@ -32,7 +29,7 @@ namespace VintageMagicMod.WitchOven.Recipes
         }
     }
 
-    public class WitchOvenRecipeLoader : ModSystem
+    public class WitchCauldronRecipeLoader : ModSystem
     {
         ICoreServerAPI api;
 
@@ -51,8 +48,8 @@ namespace VintageMagicMod.WitchOven.Recipes
             if (!(api is ICoreServerAPI sapi)) return;
             this.api = sapi;
 
-            LoadRecipes<WitchOvenRecipe>("witchoven recipe", "recipes/witchoven", (r) => {
-                sapi.RegisterWitchOvenRecipe(r);
+            LoadRecipes<WitchCauldronRecipe>("witchcauldron recipe", "recipes/witchcauldron", (r) => {
+                sapi.RegisterWitchCauldronRecipe(r);
             });
         }
 

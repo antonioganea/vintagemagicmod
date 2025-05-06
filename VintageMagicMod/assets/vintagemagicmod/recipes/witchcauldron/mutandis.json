@@ -1,0 +1,28 @@
+﻿[
+  {
+    "code": "mutandis",
+    "sealHours": 24,
+    "ingredients": [
+      {
+        "type": "item",
+        "code": "healingessenceportion",
+        "litres": 10
+      },
+      {
+        "type": "block",
+        "code": "game:flower-horsetail-free",
+        "quantity": 5
+      },
+      {
+        "type": "item",
+        "code": "game:bonemeal",
+        "quantity": 5
+      }
+    ],
+    "output": {
+      "type": "item",
+      "code": "game:bonemeal",
+      "quantity": 10
+    }
+  }
+]
