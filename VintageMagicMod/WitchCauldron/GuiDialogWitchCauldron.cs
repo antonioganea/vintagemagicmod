@@ -50,7 +50,7 @@ public class GuiDialogWitchCauldron : GuiDialogBlockEntity
             .BeginChildElements(bgBounds)
             .AddItemSlotGrid(Inventory, SendInvPacket, 1, new int[1] { BlockEntityWitchCauldron.INPUT_SLOT }, inputSlotBounds, "inputSlot")
             .AddItemSlotGrid(Inventory, SendInvPacket, 3, BlockEntityWitchCauldron.GetSelectiveSlots(), auxiliarySlotBounds, "auxiliarySlots")
-            .AddSmallButton(Lang.Get("barrel-seal"), onSealClick, ElementBounds.Fixed(0.0, 100.0, 80.0, 25.0))
+            .AddSmallButton(Lang.Get($"{VintageMagicModModSystem.Domain}:witchcauldron-brew"), onBrewClick, ElementBounds.Fixed(0.0, 100.0, 80.0, 25.0))
             .AddInset(fullnessMeterBounds.ForkBoundingParent(2.0, 2.0, 2.0, 2.0), 2)
             .AddDynamicCustomDraw(fullnessMeterBounds, fullnessMeterDraw, "liquidBar")
             .AddDynamicText(getContentsText(), CairoFont.WhiteDetailText(), barrelBoundsRight, "contentText")
@@ -144,8 +144,10 @@ public class GuiDialogWitchCauldron : GuiDialogBlockEntity
         }
     }
 
-    private bool onSealClick()
+    private bool onBrewClick()
     {
+        // TODO : modify this logic to actually brew stuff ..
+
         if (!(capi.World.BlockAccessor.GetBlockEntity(BlockEntityPosition) is BlockEntityWitchCauldron bebarrel) || bebarrel.Sealed)
         {
             return true;
@@ -155,7 +157,7 @@ public class GuiDialogWitchCauldron : GuiDialogBlockEntity
             return true;
         }
         bebarrel.SealBarrel();
-        capi.Network.SendBlockEntityPacket(BlockEntityPosition, 1337);
+        capi.Network.SendBlockEntityPacket(BlockEntityPosition, BlockEntityWitchCauldron.BREW_CAULDRON_PACKET_ID);
         capi.World.PlaySoundAt(new AssetLocation("sounds/player/seal", "game"), BlockEntityPosition, 0.4);
         TryClose();
         return true;

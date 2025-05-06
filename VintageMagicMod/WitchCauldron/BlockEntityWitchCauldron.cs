@@ -15,6 +15,8 @@ namespace VintageMagicMod.WitchCauldron
 
         GuiDialogWitchCauldron invDialog;
 
+        public const int BREW_CAULDRON_PACKET_ID = 1337;
+
         public const int LIQUID_SLOT = 0;
         public const int INPUT_SLOT = 1;
 
@@ -345,7 +347,7 @@ namespace VintageMagicMod.WitchCauldron
             }
 
 
-            if (packetid == 1337)
+            if (packetid == BREW_CAULDRON_PACKET_ID)
             {
                 SealBarrel();
             }
