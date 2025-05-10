@@ -156,7 +156,7 @@ public class GuiDialogWitchCauldron : GuiDialogBlockEntity
         {
             return true;
         }
-        bebarrel.SealBarrel();
+        bebarrel.BrewCauldron();
         capi.Network.SendBlockEntityPacket(BlockEntityPosition, BlockEntityWitchCauldron.BREW_CAULDRON_PACKET_ID);
         capi.World.PlaySoundAt(new AssetLocation("sounds/player/seal", "game"), BlockEntityPosition, 0.4);
         TryClose();

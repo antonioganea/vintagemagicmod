@@ -12,14 +12,13 @@ namespace VintageMagicMod.WitchCauldron.Recipes
 {
     public static partial class ApiAdditions
     {
-        public static ItemStack TryExtractFumes(this ItemStack stack, ICoreAPI api)
+        // TODO : Maybe we should take this function off of the ICoreAPI ? so we avoid cluttering..
+        public static ItemStack TryBrewIngredients(this ICoreAPI api, ItemSlot[] inputSlots)
         {
-            var dummySlot = new DummySlot(stack);
-
-            foreach (var recipe in api.GetWitchOvenRecipes())
+            foreach (var recipe in api.GetWitchCauldronRecipes())
             {
                 int outputStackSize;
-                if (recipe.Matches(new ItemSlot[] { dummySlot }, out outputStackSize))
+                if (recipe.Matches(inputSlots, out outputStackSize))
                 {
                     return recipe.Output.ResolvedItemstack;
                 }

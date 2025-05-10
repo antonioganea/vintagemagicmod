@@ -272,7 +272,7 @@ namespace VintageMagicMod.WitchCauldron
         }
 
 
-        public void SealBarrel()
+        public void BrewCauldron() // ex "SealBarrel"
         {
             if (Sealed) return;
 
@@ -349,7 +349,7 @@ namespace VintageMagicMod.WitchCauldron
 
             if (packetid == BREW_CAULDRON_PACKET_ID)
             {
-                SealBarrel();
+                BrewCauldron();
             }
         }
 
